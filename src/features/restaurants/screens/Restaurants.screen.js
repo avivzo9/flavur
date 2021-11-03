@@ -1,19 +1,22 @@
-import React from 'react';
-import { FlatList, SafeAreaView, StyleSheet, View } from 'react-native';
-import { Searchbar } from 'react-native-paper';
+import React, { useContext } from 'react';
+import { FlatList, SafeAreaView, StyleSheet } from 'react-native';
+import { RestaurantsContext } from '../../../services/restaurants/restaurants.context';
 import { spacing } from '../../../utils/sizes';
 import RestaurantsCard from '../cmps/RestaurantsCard.cmp';
+import { ActivityIndicator, Colors } from 'react-native-paper';
+import LocationSearch from '../cmps/LocationSearch';
 
 export default function RestaurantsScreen() {
+    const { restaurants, isLoading } = useContext(RestaurantsContext)
+
+    if (isLoading) return (<ActivityIndicator style={{ flex: 1 }} animating={true} size="large" color={Colors.red800} />)
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.searchCon}>
-                <Searchbar
-                    placeholder="Search"
-                />
-            </View>
-            <FlatList data={[{ name: 1 }, { name: 2 }, { name: 3 }, { name: 4 }, { name: 5 }]} renderItem={() => <RestaurantsCard />} keyExtractor={item => item.name} contentContainerStyle={{ padding: spacing.md }} />
+            <LocationSearch />
+            <FlatList data={restaurants}
+                renderItem={({ item, idx }) => <RestaurantsCard restaurant={item} key={idx} />}
+                contentContainerStyle={{ padding: spacing.md }} />
         </SafeAreaView>
     )
 };
@@ -21,8 +24,5 @@ export default function RestaurantsScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-    },
-    searchCon: {
-        padding: spacing.md,
     },
 });

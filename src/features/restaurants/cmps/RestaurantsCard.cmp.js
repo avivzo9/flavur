@@ -1,35 +1,36 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { Card, Paragraph } from 'react-native-paper';
-import { SvgXml } from 'react-native-svg';
-import star from '../../../../assets/img/star';
 import { fontSizes, spacing } from '../../../utils/sizes';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { SvgXml } from 'react-native-svg';
+import { mockImages } from '../../../services/restaurants/mock';
 
-export default function RestaurantsCard({ restaurant = {} }) {
-    const { name = 'Some Restaurant', icon, photos = ['https://www.chasinglenscapes.com/wp-content/uploads/2020/06/food-photography-on-the-go-tips.jpg'],
-        address = "Some Street", isOpen = true, rating = 4.6, isPermClosed } = restaurant
-
+export default function RestaurantsCard({ restaurant }) {
+    const { name, icon, photos, vicinity, opening_hours = false, rating, business_status } = restaurant
+    const resPhoto = photos.map((p) => mockImages[Math.ceil(Math.random() * mockImages.length - 1)])
+    const isTmpClosed = business_status === "OPERATIONAL" ? true : false
     const ratingArr = Array.from(new Array(Math.floor(rating)))
 
     return (
         <View style={styles.container}>
             <Card elevation={5}>
-                <Card.Cover source={{ uri: photos[0] }} />
+                <Card.Cover source={{ uri: resPhoto[0] }} />
                 <View style={styles.cardMainCon}>
                     <View style={styles.cardMain}>
                         <Card.Title style={styles.title} title={name} />
                         <Card.Content>
-                            <Paragraph>{address}</Paragraph>
+                            <Paragraph>{vicinity}</Paragraph>
                         </Card.Content>
                     </View>
-                    <SvgXml xml={star} width={35} height={35} style={{ marginRight: spacing.md }} />
+                    <Image style={{ width: 20, height: 20 }} source={{ uri: icon }} />
                 </View>
                 <View style={styles.contentCon}>
                     <View style={styles.ratingCon}>
-                        {ratingArr.map(() => <SvgXml xml={star} width={23} height={23} />)}
+                        {ratingArr.map(() => <Ionicons name={"star"} size={20} color={'#FFBD00'} />)}
                         <Text style={{ fontSize: fontSizes.md }}> {rating}</Text>
                     </View>
-                    {isPermClosed ? <Text>Permenantly closed</Text> : <Text style={{ color: isOpen ? 'green' : 'red' }}>{isOpen ? 'Open now' : 'Closed'}</Text>}
+                    <Text style={{ color: opening_hours.open_now ? 'green' : 'red' }}>{opening_hours.open_now && isTmpClosed ? 'Open now' : 'Closed'}</Text>
                 </View>
             </Card>
         </View>
