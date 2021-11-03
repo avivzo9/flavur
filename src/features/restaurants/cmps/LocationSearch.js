@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import { LocationContext } from '../../../services/location/location.context';
@@ -8,14 +8,7 @@ export default function LocationSearch() {
     const { keyword, onSearch } = useContext(LocationContext)
     const [searchKeyword, setSearchKeyword] = useState(keyword)
 
-    const search = async (txt) => {
-        console.log('txt:', txt)
-        await onSearch(txt)
-    }
-
-    useEffect(() => {
-        search(searchKeyword)
-    }, [])
+    const search = async (txt) => await onSearch(txt)
 
     return (
         <View style={styles.searchCon}>

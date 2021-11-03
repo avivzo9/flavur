@@ -3,11 +3,10 @@ import { Image, StyleSheet, Text, View } from 'react-native';
 import { Card, Paragraph } from 'react-native-paper';
 import { fontSizes, spacing } from '../../../utils/sizes';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { SvgXml } from 'react-native-svg';
 import { mockImages } from '../../../services/restaurants/mock';
 
 export default function RestaurantsCard({ restaurant }) {
-    const { name, icon, photos, vicinity, opening_hours = false, rating, business_status } = restaurant
+    const { name, icon, photos, vicinity, opening_hours = false, rating, business_status, place_id } = restaurant
     const resPhoto = photos.map((p) => mockImages[Math.ceil(Math.random() * mockImages.length - 1)])
     const isTmpClosed = business_status === "OPERATIONAL" ? true : false
     const ratingArr = Array.from(new Array(Math.floor(rating)))
@@ -27,7 +26,7 @@ export default function RestaurantsCard({ restaurant }) {
                 </View>
                 <View style={styles.contentCon}>
                     <View style={styles.ratingCon}>
-                        {ratingArr.map(() => <Ionicons name={"star"} size={20} color={'#FFBD00'} />)}
+                        {ratingArr.map((_, idx) => <Ionicons key={`star-${place_id}-${idx}`} name={"star"} size={20} color={'#FFBD00'} />)}
                         <Text style={{ fontSize: fontSizes.md }}> {rating}</Text>
                     </View>
                     <Text style={{ color: opening_hours.open_now ? 'green' : 'red' }}>{opening_hours.open_now && isTmpClosed ? 'Open now' : 'Closed'}</Text>
@@ -55,7 +54,6 @@ const styles = StyleSheet.create({
     },
     cardMainCon: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
     },
     cardMain: {

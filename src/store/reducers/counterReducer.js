@@ -7,12 +7,12 @@ export function counterReducer(state = INITIAL_STATE, action) {
         case 'INC_COUNTER':
             return {
                 ...state,
-                counetr: counetr + 1
+                counter: state.counter + 1
             }
         case 'DEC_COUNTER':
             return {
                 ...state,
-                counetr: counetr - 1
+                counter: state.counter - 1
             }
         default:
             return state

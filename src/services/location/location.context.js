@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { getLocation } from './location.service';
 
 export const LocationContext = createContext()
@@ -9,14 +9,20 @@ export const LocationContextProvider = ({ children }) => {
     const [keyword, setKeyword] = useState('San Francisco')
 
     const onSearch = async (searchTerm) => {
-        console.log('searchTerm:', searchTerm)
-        setKeyword(searchTerm)
-        if (!searchTerm.length) return
         setIsLoading(true)
-        const { location } = await getLocation(searchTerm.toLowerCase())
+        setKeyword(searchTerm)
+    }
+
+    const search = async () => {
+        const { location } = await getLocation(keyword.toLowerCase())
         setLocation(location)
         setIsLoading(false)
     }
+
+    useEffect(() => {
+        if (!keyword.length) return
+        search()
+    }, [keyword])
 
     return (
         <LocationContext.Provider value={{ location, isLoading, onSearch, keyword }}>
