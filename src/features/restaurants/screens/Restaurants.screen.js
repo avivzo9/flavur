@@ -16,7 +16,7 @@ export default function RestaurantsScreen({ navigation }) {
         <SafeAreaView style={styles.container}>
             <LocationSearch />
             <FlatList data={restaurants}
-                renderItem={({ item, idx }) => <TouchableOpacity onPress={() => navigation.navigate('RestaurantDetails')}><RestaurantsCard restaurant={item} key={`${item.index}-${idx}`} /></TouchableOpacity>}
+                renderItem={({ item, idx }) => <TouchableOpacity onPress={() => navigation.navigate('RestaurantDetails', { restaurant: item })}><RestaurantsCard restaurant={item} key={`${item.index}-${idx}`} /></TouchableOpacity>}
                 contentContainerStyle={{ padding: spacing.md }} />
         </SafeAreaView>
     )

@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Settings from '../features/restaurants/screens/Settings.screen';
 import { RestaurantsNavigator } from './stacks/restaurantsStack';
+import MapScreen from '../features/restaurants/screens/Map.screen';
 
 const Tab = createBottomTabNavigator();
 const TABS = {
@@ -28,7 +29,7 @@ export default function Navigation() {
         <NavigationContainer>
             <Tab.Navigator initialRouteName="home" screenOptions={screenOptions}>
                 <Tab.Screen name="home" options={{ title: 'Restaurants' }} component={RestaurantsNavigator} />
-                <Tab.Screen name="map" options={{ title: 'Map' }} component={Map} />
+                <Tab.Screen name="map" options={{ title: 'Map' }} component={MapScreen} />
                 <Tab.Screen name="settings" options={{ title: 'Settings' }} component={Settings} />
             </Tab.Navigator>
         </NavigationContainer>

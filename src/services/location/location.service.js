@@ -5,8 +5,7 @@ export async function getLocation(search) {
         return new Promise((res, rej) => {
             const location = mockLocations[search]
             if (!location) rej('not found')
-            const { geometry } = location.results[0]
-            res(geometry)
+            res(location.results[0])
         })
     } catch (err) {
         console.log('err:', err)

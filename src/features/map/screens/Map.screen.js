@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useState } from "react"
-import { Platform, StyleSheet } from "react-native";
-import MapView, { Callout, Marker } from 'react-native-maps';
+import { StyleSheet, Text } from "react-native";
+import MapView, { Marker } from 'react-native-maps';
 import { ActivityIndicator, Colors } from "react-native-paper";
 import { LocationContext } from "../../../services/location/location.context";
 import { RestaurantsContext } from "../../../services/restaurants/restaurants.context";
-import MapCallout from "../../map/cmps/map.callout";
 import LocationSearch from "../cmps/LocationSearch";
+import MapCallout from "../cmps/map.callout";
+import RestaurantsCard from "../cmps/RestaurantsCard.cmp";
 
-export default function MapScreen({ route, navigation }) {
+export default function MapScreen({ route }) {
     const { location } = useContext(LocationContext)
     const { restaurants } = useContext(RestaurantsContext)
     const { viewport } = location.geometry
@@ -32,9 +33,9 @@ export default function MapScreen({ route, navigation }) {
                     title={rest.name}
                     coordinate={{ latitude: rest.geometry.location.lat, longitude: rest.geometry.location.lng }}
                 >
-                    <Callout onPress={() => navigation.navigate("RestaurantDetails", { restaurant: rest })}>
+                    <MapView.Callout>
                         <MapCallout restaurant={rest} />
-                    </Callout>
+                    </MapView.Callout>
                 </Marker>)}
             </MapView>
         </>

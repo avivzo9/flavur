@@ -16,11 +16,12 @@ export const RestaurantsContextProvider = ({ children }) => {
             setIsLoading(false)
         }, 2000)
     }
-    
+
     useEffect(() => {
         if (location) {
+            const { lat, lng } = location.geometry.location
             setRestaurants([])
-            const locationStr = `${location.lat},${location.lng}`
+            const locationStr = `${lat},${lng}`
             retrieveRestaurants(locationStr)
         }
     }, [location])

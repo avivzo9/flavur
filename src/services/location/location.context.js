@@ -14,7 +14,7 @@ export const LocationContextProvider = ({ children }) => {
     }
 
     const search = async () => {
-        const { location } = await getLocation(keyword.toLowerCase())
+        const location = await getLocation(keyword.toLowerCase())
         setLocation(location)
         setIsLoading(false)
     }

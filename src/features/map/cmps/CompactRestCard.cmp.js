@@ -5,24 +5,20 @@ import { fontSizes, spacing } from '../../../utils/sizes';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { mockImages } from '../../../services/restaurants/mock';
 
-export default function RestaurantsCard({ restaurant }) {
+export default function CompactRestCard({ restaurant }) {
     const { name, icon, photos, vicinity, opening_hours = false, rating, business_status, place_id } = restaurant
     restaurant.photos = photos.map((p) => mockImages[Math.ceil(Math.random() * mockImages.length - 1)])
     const isTmpClosed = business_status === "OPERATIONAL" ? true : false
     const ratingArr = Array.from(new Array(Math.floor(rating)))
 
     return (
-        <View style={styles.container}>
+        <View>
             <Card elevation={5}>
                 <Card.Cover source={{ uri: restaurant.photos[0] }} />
                 <View style={styles.cardMainCon}>
                     <View style={styles.cardMain}>
                         <Card.Title style={styles.title} title={name} />
-                        <Card.Content>
-                            <Paragraph>{vicinity}</Paragraph>
-                        </Card.Content>
                     </View>
-                    <Image style={{ width: 20, height: 20 }} source={{ uri: icon }} />
                 </View>
                 <View style={styles.contentCon}>
                     <View style={styles.ratingCon}>
@@ -37,9 +33,6 @@ export default function RestaurantsCard({ restaurant }) {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        marginBottom: spacing.md
-    },
     title: {
         fontFamily: 'Oswald-VariableFont_wght',
     },
@@ -57,6 +50,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     cardMain: {
-        width: '90%'
+        width: '90%',
+        alignItems: 'center',
     }
 });
