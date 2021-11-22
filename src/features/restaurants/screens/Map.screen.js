@@ -5,7 +5,7 @@ import { ActivityIndicator, Colors } from "react-native-paper";
 import { LocationContext } from "../../../services/location/location.context";
 import { RestaurantsContext } from "../../../services/restaurants/restaurants.context";
 import MapCallout from "../../map/cmps/map.callout";
-import LocationSearch from "../cmps/LocationSearch";
+import Search from "../cmps/Search.cmp";
 
 export default function MapScreen({ route, navigation }) {
     const { location } = useContext(LocationContext)
@@ -25,7 +25,7 @@ export default function MapScreen({ route, navigation }) {
 
     return (
         <>
-            <LocationSearch routeName={route.name} />
+            <Search routeName={route.name} />
             <MapView style={styles.map} region={{ latitude: lat, longitude: lng, latitudeDelta: latDelta, longitudeDelta: 0.05 }}>
                 {restaurants.map((rest) => <Marker
                     key={rest.name}

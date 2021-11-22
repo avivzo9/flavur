@@ -1,20 +1,29 @@
-import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import React, { useContext } from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Card, Paragraph } from 'react-native-paper';
 import { fontSizes, spacing } from '../../../utils/sizes';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { mockImages } from '../../../services/restaurants/mock';
+import { FavouritesContext } from '../../../services/favourites/favourites.context';
 
-export default function RestaurantsCard({ restaurant }) {
+export default function RestaurantsCard({ restaurant, navigation }) {
     const { name, icon, photos, vicinity, opening_hours = false, rating, business_status, place_id } = restaurant
-    restaurant.photos = photos.map((p) => mockImages[Math.ceil(Math.random() * mockImages.length - 1)])
+    restaurant.photos = photos.map((_) => mockImages[Math.ceil(Math.random() * mockImages.length - 1)])
     const isTmpClosed = business_status === "OPERATIONAL" ? true : false
     const ratingArr = Array.from(new Array(Math.floor(rating)))
 
+    const { favourites, addFavourites, removeFavourites } = useContext(FavouritesContext)
+    const isFavourite = favourites.find((r) => r.place_id === restaurant.place_id)
+
     return (
-        <View style={styles.container}>
+        <TouchableOpacity onPress={() => navigation.navigate('RestaurantDetails', { restaurant })} activeOpacity={0.8} style={styles.container}>
             <Card elevation={5}>
-                <Card.Cover source={{ uri: restaurant.photos[0] }} />
+                <View>
+                    <TouchableOpacity activeOpacity={0.5} onPress={() => isFavourite ? removeFavourites(restaurant) : addFavourites(restaurant)} style={styles.favBtn}>
+                        <Ionicons name={isFavourite ? "heart" : "heart-outline"} size={28} color={isFavourite ? 'red' : 'white'} />
+                    </TouchableOpacity>
+                    <Card.Cover style={{ zIndex: 5 }} source={{ uri: restaurant.photos[0] }} />
+                </View>
                 <View style={styles.cardMainCon}>
                     <View style={styles.cardMain}>
                         <Card.Title style={styles.title} title={name} />
@@ -32,7 +41,7 @@ export default function RestaurantsCard({ restaurant }) {
                     <Text style={{ color: opening_hours.open_now ? 'green' : 'red' }}>{opening_hours.open_now && isTmpClosed ? 'Open now' : 'Closed'}</Text>
                 </View>
             </Card>
-        </View>
+        </TouchableOpacity>
     )
 };
 
@@ -58,5 +67,12 @@ const styles = StyleSheet.create({
     },
     cardMain: {
         width: '90%'
-    }
+    },
+    favBtn: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+        zIndex: 9,
+        padding: 5
+    },
 });

@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from "react"
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet } from "react-native";
 import MapView, { Marker } from 'react-native-maps';
 import { ActivityIndicator, Colors } from "react-native-paper";
 import { LocationContext } from "../../../services/location/location.context";
 import { RestaurantsContext } from "../../../services/restaurants/restaurants.context";
-import LocationSearch from "../cmps/LocationSearch";
+import Search from "../cmps/Search";
 import MapCallout from "../cmps/map.callout";
-import RestaurantsCard from "../cmps/RestaurantsCard.cmp";
 
 export default function MapScreen({ route }) {
     const { location } = useContext(LocationContext)
@@ -26,7 +25,7 @@ export default function MapScreen({ route }) {
 
     return (
         <>
-            <LocationSearch routeName={route.name} />
+            <Search routeName={route.name} />
             <MapView style={styles.map} region={{ latitude: lat, longitude: lng, latitudeDelta: latDelta, longitudeDelta: 0.05 }}>
                 {restaurants.map((rest) => <Marker
                     key={rest.name}
