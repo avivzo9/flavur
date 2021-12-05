@@ -25,6 +25,7 @@ export default function RegisterScreen({ navigation }) {
                     value={email}
                     onChangeText={txt => setEmail(txt)}
                     style={styles.inputField}
+                    keyboardType="email-address"
                 />
                 <TextInput
                     label="Password"

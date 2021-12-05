@@ -24,6 +24,7 @@ export default function LoginScreen({ navigation }) {
                     value={email}
                     onChangeText={txt => setEmail(txt)}
                     style={styles.inputField}
+                    keyboardType="email-address"
                 />
                 <TextInput
                     label="Password"

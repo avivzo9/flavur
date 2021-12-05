@@ -7,13 +7,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../../../services/auth/auth.context';
 
 export default function CameraScreen({ navigation }) {
+    let camera = null
     const { user } = useContext(AuthContext)
 
     const [isFlash, setIsFlash] = useState(false)
     const [isFlashOn, setIsFlashOn] = useState(false)
     const [isBackCam, setIsBackCam] = useState(false)
     const [photo, setPhoto] = useState(null)
-    let camera = null
 
     const takePicture = async () => {
         if (isFlash && !isBackCam) setIsFlashOn(true)
