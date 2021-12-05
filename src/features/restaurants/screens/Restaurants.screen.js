@@ -6,7 +6,8 @@ import RestaurantsCard from '../cmps/RestaurantsCard.cmp';
 import { ActivityIndicator, Colors } from 'react-native-paper';
 import Search from '../cmps/Search.cmp';
 import { FavouritesContext } from '../../../services/favourites/favourites.context';
-import FavouritesBar from '../../favourites/FavouritesBar.cmp';
+import FavouritesBar from '../../favourites/cmps/FavouritesBar.cmp';
+import FadeInView from '../../animations/fade.animation';
 
 export default function RestaurantsScreen({ navigation }) {
     const { restaurants, isLoading } = useContext(RestaurantsContext)
@@ -20,9 +21,13 @@ export default function RestaurantsScreen({ navigation }) {
         <SafeAreaView style={styles.container}>
             <Search isFavouriteToggle={isToggled} onToggle={() => setIsToggled(!isToggled)} />
             {isToggled && <FavouritesBar navigation={navigation} favourites={favourites} />}
+
             <FlatList data={restaurants}
-                renderItem={({ item, idx }) => <RestaurantsCard navigation={navigation} restaurant={item} key={`${item.index}-${idx}`} />}
+                renderItem={({ item, idx }) => <FadeInView>
+                    <RestaurantsCard navigation={navigation} restaurant={item} key={`${item.index}-${idx}`} />
+                </FadeInView>}
                 contentContainerStyle={{ padding: spacing.md }} />
+
         </SafeAreaView>
     )
 };

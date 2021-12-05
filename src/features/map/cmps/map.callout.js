@@ -31,7 +31,8 @@ export default function MapCallout({ restaurant }) {
 
 const styles = StyleSheet.create({
     cardCon: {
-        paddingTop: 5,
+        paddingTop: 4,
+        paddingBottom: 4,
         maxWidth: 225,
         alignItems: 'center',
         borderRadius: 10,
@@ -57,6 +58,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         width: '95%',
+        paddingBottom: spacing.sm
     },
     ratingCon: {
         flexDirection: 'row'

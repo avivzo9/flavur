@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, View, ScrollView, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { fontSizes, spacing } from '../../utils/sizes';
-import CompactRestCard from '../map/cmps/CompactRestCard.cmp';
+import { fontSizes, spacing } from '../../../utils/sizes';
+import CompactRestCard from '../../map/cmps/CompactRestCard.cmp';
 
 export default function FavouritesBar({ favourites, navigation }) {
 

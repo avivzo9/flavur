@@ -2,12 +2,14 @@
   package="com.mealstogo">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
       android:name=".MainApplication"
       android:label="@string/app_name"
-      android:icon="@mipmap/ic_launcher"
-      android:roundIcon="@mipmap/ic_launcher_round"
+      android:icon="@mipmap/meals_to_go_icon"
+      android:roundIcon="@mipmap/meals_to_go_icon"
       android:allowBackup="false"
       android:theme="@style/AppTheme">
       <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyAuViHJowBExdhvmeG93jbLtfd7IB2AHzQ" />

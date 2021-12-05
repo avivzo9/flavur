@@ -3,12 +3,10 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Card, Paragraph } from 'react-native-paper';
 import { fontSizes, spacing } from '../../../utils/sizes';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { mockImages } from '../../../services/restaurants/mock';
 import { FavouritesContext } from '../../../services/favourites/favourites.context';
 
-export default function RestaurantsCard({ restaurant, navigation }) {
-    const { name, icon, photos, vicinity, opening_hours = false, rating, business_status, place_id } = restaurant
-    restaurant.photos = photos.map((_) => mockImages[Math.ceil(Math.random() * mockImages.length - 1)])
+export default function RestaurantsCard({ restaurant, navigation, isNavigate }) {
+    const { name, icon, vicinity, opening_hours = false, rating, business_status, place_id } = restaurant
     const isTmpClosed = business_status === "OPERATIONAL" ? true : false
     const ratingArr = Array.from(new Array(Math.floor(rating)))
 
@@ -16,7 +14,7 @@ export default function RestaurantsCard({ restaurant, navigation }) {
     const isFavourite = favourites.find((r) => r.place_id === restaurant.place_id)
 
     return (
-        <TouchableOpacity onPress={() => navigation.navigate('RestaurantDetails', { restaurant })} activeOpacity={0.8} style={styles.container}>
+        <TouchableOpacity onPress={() => !isNavigate ? navigation.navigate('RestaurantDetails', { restaurant }) : null} activeOpacity={0.8} style={styles.container}>
             <Card elevation={5}>
                 <View>
                     <TouchableOpacity activeOpacity={0.5} onPress={() => isFavourite ? removeFavourites(restaurant) : addFavourites(restaurant)} style={styles.favBtn}>
@@ -26,9 +24,9 @@ export default function RestaurantsCard({ restaurant, navigation }) {
                 </View>
                 <View style={styles.cardMainCon}>
                     <View style={styles.cardMain}>
-                        <Card.Title style={styles.title} title={name} />
+                        <Text style={styles.title}>{name}</Text>
                         <Card.Content>
-                            <Paragraph>{vicinity}</Paragraph>
+                            <Paragraph style={{ fontFamily: 'Lato-Regular' }}>{vicinity}</Paragraph>
                         </Card.Content>
                     </View>
                     <Image style={{ width: 20, height: 20 }} source={{ uri: icon }} />
@@ -51,6 +49,9 @@ const styles = StyleSheet.create({
     },
     title: {
         fontFamily: 'Oswald-VariableFont_wght',
+        color: 'black',
+        fontSize: 20,
+        padding: spacing.md,
     },
     ratingCon: {
         flexDirection: 'row'

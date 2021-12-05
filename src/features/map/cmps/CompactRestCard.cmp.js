@@ -2,11 +2,9 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Card } from 'react-native-paper';
 import { fontSizes, spacing } from '../../../utils/sizes';
-import { mockImages } from '../../../services/restaurants/mock';
 
 export default function CompactRestCard({ restaurant }) {
-    const { name, photos, opening_hours, business_status } = restaurant
-    restaurant.photos = photos.map((_) => mockImages[Math.ceil(Math.random() * mockImages.length - 1)])
+    const { name, opening_hours, business_status } = restaurant
     const isTmpClosed = business_status === "OPERATIONAL" ? true : false
 
     return (

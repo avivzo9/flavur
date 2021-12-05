@@ -37,6 +37,7 @@
 		BEFC080E64B142B587E68312 /* OswaldExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DE870F148F0D4F6388E0AF92 /* OswaldExtraLight.ttf */; };
 		3A1178E6AE1D48B1B14839BE /* Lato-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3DA808B028D34C22958318BC /* Lato-Regular.ttf */; };
 		86EB4DDD7AD94D55976CDB44 /* Oswald-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 83B9AB87C75D4C57B0FB4361 /* Oswald-VariableFont_wght.ttf */; };
+		2EC2411F025D40F69F87A82D /* Lato-Regular.ttf.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C2FF6F07596C4D71BFD7F808 /* Lato-Regular.ttf.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +87,7 @@
 		DE870F148F0D4F6388E0AF92 /* OswaldExtraLight.ttf */ = {isa = PBXFileReference; name = "OswaldExtraLight.ttf"; path = "../assets/fonts/OswaldExtraLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		3DA808B028D34C22958318BC /* Lato-Regular.ttf */ = {isa = PBXFileReference; name = "Lato-Regular.ttf"; path = "../assets/fonts/Lato-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		83B9AB87C75D4C57B0FB4361 /* Oswald-VariableFont_wght.ttf */ = {isa = PBXFileReference; name = "Oswald-VariableFont_wght.ttf"; path = "../assets/fonts/Oswald-VariableFont_wght.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		C2FF6F07596C4D71BFD7F808 /* Lato-Regular.ttf.ttf */ = {isa = PBXFileReference; name = "Lato-Regular.ttf.ttf"; path = "../assets/fonts/Lato-Regular.ttf.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -203,6 +205,7 @@
 				DE870F148F0D4F6388E0AF92 /* OswaldExtraLight.ttf */,
 				3DA808B028D34C22958318BC /* Lato-Regular.ttf */,
 				83B9AB87C75D4C57B0FB4361 /* Oswald-VariableFont_wght.ttf */,
+				C2FF6F07596C4D71BFD7F808 /* Lato-Regular.ttf.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -323,6 +326,7 @@
 				BEFC080E64B142B587E68312 /* OswaldExtraLight.ttf in Resources */,
 				3A1178E6AE1D48B1B14839BE /* Lato-Regular.ttf in Resources */,
 				86EB4DDD7AD94D55976CDB44 /* Oswald-VariableFont_wght.ttf in Resources */,
+				2EC2411F025D40F69F87A82D /* Lato-Regular.ttf.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

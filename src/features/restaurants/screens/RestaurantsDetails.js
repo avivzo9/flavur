@@ -9,7 +9,7 @@ export default function RestaurantsDetails({ route }) {
 
     return (
         <SafeAreaView>
-            <RestaurantsCard restaurant={restaurant} />
+            <RestaurantsCard restaurant={restaurant} isNavigate={route} />
             <ScrollView>
                 <List.Section title="Accordions">
                     <List.Accordion
