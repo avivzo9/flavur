@@ -2,12 +2,12 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { RestaurantsNavigator } from './stacks/restaurantsStack';
-import MapScreen from '../features/restaurants/screens/Map.screen';
 import { FavouritesContextProvider } from '../services/favourites/favourites.context';
 import { LocationContextProvider } from '../services/location/location.context';
 import { RestaurantsContextProvider } from '../services/restaurants/restaurants.context';
 import SettingsNavigator from './SettingsNavigator';
 import FavouritesScreen from '../features/favourites/screens/Favourites.screen';
+import MapScreen from '../features/map/screens/Map.screen';
 
 const Tab = createBottomTabNavigator();
 const TABS = {

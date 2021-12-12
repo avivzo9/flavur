@@ -1,13 +1,11 @@
 import React from 'react';
 import { Image, Platform, StyleSheet, Text, View } from 'react-native';
-import { mockImages } from '../../../services/restaurants/mock';
 import { fontSizes, spacing } from '../../../utils/sizes';
 import { WebView } from 'react-native-webview';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default function MapCallout({ restaurant }) {
     const { name, photos, opening_hours = false, rating, business_status, place_id } = restaurant
-    restaurant.photos = photos.map((p) => mockImages[Math.ceil(Math.random() * mockImages.length - 1)])
     const isTmpClosed = business_status === "OPERATIONAL" ? true : false
     const ratingArr = Array.from(new Array(Math.floor(rating)))
 

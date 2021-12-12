@@ -11,10 +11,8 @@ export const RestaurantsContextProvider = ({ children }) => {
 
     const retrieveRestaurants = async (loc) => {
         setIsLoading(true)
-        setTimeout(async () => {
-            setRestaurants(await getRestaurants(loc))
-            setIsLoading(false)
-        }, 2000)
+        setRestaurants(await getRestaurants(loc))
+        setIsLoading(false)
     }
 
     useEffect(() => {

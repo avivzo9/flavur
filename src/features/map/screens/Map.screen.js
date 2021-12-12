@@ -4,7 +4,7 @@ import MapView, { Marker } from 'react-native-maps';
 import { ActivityIndicator, Colors } from "react-native-paper";
 import { LocationContext } from "../../../services/location/location.context";
 import { RestaurantsContext } from "../../../services/restaurants/restaurants.context";
-import Search from "../cmps/Search";
+import Search from "../../restaurants/cmps/Search.cmp";
 import MapCallout from "../cmps/map.callout";
 
 export default function MapScreen({ route }) {

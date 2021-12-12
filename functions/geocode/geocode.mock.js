@@ -1,4 +1,4 @@
-export const mockLocations = {
+module.exports.locations = {
     antwerp: {
         results: [
             {
