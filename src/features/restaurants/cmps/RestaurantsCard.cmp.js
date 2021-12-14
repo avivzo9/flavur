@@ -4,23 +4,25 @@ import { Card, Paragraph } from 'react-native-paper';
 import { fontSizes, spacing } from '../../../utils/sizes';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { FavouritesContext } from '../../../services/favourites/favourites.context';
+import { isDarkMode } from '../../../services/app.config';
 
-export default function RestaurantsCard({ restaurant, navigation, isNavigate }) {
-    const { name, icon, vicinity, opening_hours = false, rating, business_status, place_id } = restaurant
+export default function RestaurantsCard({ restaurant, navigation, isNavigate, isDetails }) {
+    const { favourites, addFavourites, removeFavourites } = useContext(FavouritesContext)
+    const { name, icon, vicinity, user_ratings_total, opening_hours = false, rating, business_status, place_id } = restaurant
     const isTmpClosed = business_status === "OPERATIONAL" ? true : false
     const ratingArr = Array.from(new Array(Math.floor(rating)))
-
-    const { favourites, addFavourites, removeFavourites } = useContext(FavouritesContext)
     const isFavourite = favourites.find((r) => r.place_id === restaurant.place_id)
 
+    const formatUserRating = (rate) => rate.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+
     return (
-        <TouchableOpacity onPress={() => !isNavigate ? navigation.navigate('RestaurantDetails', { restaurant }) : null} activeOpacity={0.8} style={styles.container}>
+        <TouchableOpacity onPress={() => !isNavigate ? navigation.navigate('RestaurantDetails', { restaurant }) : null} activeOpacity={isDetails ? 1 : 0.8} style={styles.container}>
             <Card elevation={5}>
-                <View>
+                <View style={{ height: isDetails ? 190 : 130 }}>
                     <TouchableOpacity activeOpacity={0.5} onPress={() => isFavourite ? removeFavourites(restaurant) : addFavourites(restaurant)} style={styles.favBtn}>
                         <Ionicons name={isFavourite ? "heart" : "heart-outline"} size={28} color={isFavourite ? 'red' : 'white'} />
                     </TouchableOpacity>
-                    <Card.Cover style={{ zIndex: 5 }} source={{ uri: restaurant.photos[0] }} />
+                    <Card.Cover style={{ zIndex: 5, height: isDetails ? 190 : 130 }} source={{ uri: restaurant.photos[0] }} />
                 </View>
                 <View style={styles.cardMainCon}>
                     <View style={styles.cardMain}>
@@ -34,7 +36,7 @@ export default function RestaurantsCard({ restaurant, navigation, isNavigate }) 
                 <View style={styles.contentCon}>
                     <View style={styles.ratingCon}>
                         {ratingArr.map((_, idx) => <Ionicons key={`star-${place_id}-${idx}`} name={"star"} size={20} color={'#FFBD00'} />)}
-                        <Text style={{ fontSize: fontSizes.md }}> {rating}</Text>
+                        <Text style={{ fontSize: fontSizes.md }}> {rating} ({formatUserRating(user_ratings_total)})</Text>
                     </View>
                     <Text style={{ color: opening_hours.open_now ? 'green' : 'red' }}>{opening_hours.open_now && isTmpClosed ? 'Open now' : 'Closed'}</Text>
                 </View>
@@ -45,13 +47,15 @@ export default function RestaurantsCard({ restaurant, navigation, isNavigate }) 
 
 const styles = StyleSheet.create({
     container: {
-        marginBottom: spacing.md
+        marginBottom: spacing.md,
+        borderRadius: 10
     },
     title: {
         fontFamily: 'Oswald-VariableFont_wght',
-        color: 'black',
+        color: isDarkMode ? 'white' : 'black',
         fontSize: 20,
         padding: spacing.md,
+        paddingBottom: 0
     },
     ratingCon: {
         flexDirection: 'row'
@@ -64,7 +68,7 @@ const styles = StyleSheet.create({
     },
     cardMainCon: {
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'center'
     },
     cardMain: {
         width: '90%'

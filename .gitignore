@@ -63,3 +63,4 @@ buck-out/
 firebase-debug.log
 ui-debug.log
 .runtimeconfig.json
+.watchmanconfig

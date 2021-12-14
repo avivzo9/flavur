@@ -1,19 +1,42 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { LocationContext } from '../location/location.context';
-import { getRestaurants } from './restaurants.service';
+import { getRestaurantDetails, getRestaurants } from './restaurants.service';
 
 export const RestaurantsContext = createContext()
 
 export const RestaurantsContextProvider = ({ children }) => {
     const [restaurants, setRestaurants] = useState([])
     const [isLoading, setIsLoading] = useState(false)
+    const [restaurantError, setRestaurantError] = useState(null)
     const { location } = useContext(LocationContext)
 
     const retrieveRestaurants = async (loc) => {
         setIsLoading(true)
-        setRestaurants(await getRestaurants(loc))
-        setIsLoading(false)
+        getRestaurants(loc).then((res) => {
+            setRestaurants(res)
+            setIsLoading(false)
+        }).catch((err) => {
+            setRestaurantError(err)
+            setIsLoading(false)
+        })
     }
+
+    const searchRestaurantDetails = async (placeId) => {
+        try {
+            setIsLoading(true)
+            const details = await getRestaurantDetails(placeId)
+            if (!details) {
+                setIsLoading(false)
+                Promise.reject('C\'ant find details')
+            }
+            setIsLoading(false)
+            return details.result;
+        } catch (err) {
+            setRestaurantError(err)
+            setIsLoading(false)
+        }
+    }
+
 
     useEffect(() => {
         if (location) {
@@ -25,7 +48,7 @@ export const RestaurantsContextProvider = ({ children }) => {
     }, [location])
 
     return (
-        <RestaurantsContext.Provider value={{ restaurants, isLoading }}>
+        <RestaurantsContext.Provider value={{ restaurants, isLoading, restaurantError, searchRestaurantDetails }}>
             {children}
         </RestaurantsContext.Provider>
     )

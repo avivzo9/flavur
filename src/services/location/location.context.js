@@ -6,6 +6,7 @@ export const LocationContext = createContext()
 export const LocationContextProvider = ({ children }) => {
     const [location, setLocation] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
+    const [locationError, setLocationError] = useState(null)
     const [keyword, setKeyword] = useState('San Francisco')
 
     const onSearch = async (searchTerm) => {
@@ -14,9 +15,13 @@ export const LocationContextProvider = ({ children }) => {
     }
 
     const search = async () => {
-        const location = await getLocation(keyword.toLowerCase())
-        setLocation(location[0])
-        setIsLoading(false)
+        getLocation(keyword.toLowerCase()).then((res) => {
+            setLocation(res[0])
+            setIsLoading(false)
+        }).catch((err) => {
+            setLocationError(err)
+            setIsLoading(false)
+        })
     }
 
     useEffect(() => {
@@ -25,7 +30,7 @@ export const LocationContextProvider = ({ children }) => {
     }, [keyword])
 
     return (
-        <LocationContext.Provider value={{ location, isLoading, onSearch, keyword }}>
+        <LocationContext.Provider value={{ location, isLoading, onSearch, keyword, locationError }}>
             {children}
         </LocationContext.Provider>
     )

@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react"
 import { StyleSheet } from "react-native";
 import MapView, { Marker } from 'react-native-maps';
 import { ActivityIndicator, Colors } from "react-native-paper";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { LocationContext } from "../../../services/location/location.context";
 import { RestaurantsContext } from "../../../services/restaurants/restaurants.context";
 import Search from "../../restaurants/cmps/Search.cmp";
@@ -22,6 +23,7 @@ export default function MapScreen({ route }) {
     }, [location, viewport])
 
     if (!latDelta) return (<ActivityIndicator style={{ flex: 1 }} animating={true} size="large" color={Colors.red800} />)
+    if (!location) return (<MapView style={styles.map} region={{ latitude: 31.4000, longitude: 35.0000, latitudeDelta: (35.0818 - 31.4117), longitudeDelta: 0.1 }} />)
 
     return (
         <>
