@@ -9,13 +9,10 @@ module.exports.geocodeRequest = (request, response, client) => {
         const location = locations[city.toLowerCase()]
         response.json(location)
     } else {
-        // const KEY = functions.config()
-        // response.json(KEY)
         client.geocode({
             params: {
                 address: city,
-                key: "AIzaSyAuViHJowBExdhvmeG93jbLtfd7IB2AHzQ"
-                // key: functions.config().google.key
+                key: functions.config().google.key
             },
             timeout: 1000
         }).then((res) => response.json(res.data))

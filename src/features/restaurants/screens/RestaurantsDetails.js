@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
-import { Appearance, Image, Linking, StyleSheet, View } from "react-native";
+import { Image, Linking, StyleSheet, View } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { List } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -12,7 +12,7 @@ import { ActivityIndicator, Colors } from 'react-native-paper';
 const mapsIcon = require('../../../assets/icons/google_maps_icon.png')
 const wazeIcon = require('../../../assets/icons/waze_icon.png')
 
-export default function RestaurantsDetails({ route }) {
+export default function RestaurantsDetails({ navigation, route }) {
     const { searchRestaurantDetails } = useContext(RestaurantsContext)
     const { restaurant } = route.params
 
@@ -30,15 +30,18 @@ export default function RestaurantsDetails({ route }) {
         <SafeAreaView style={{ height: '100%' }}>
             <RestaurantsCard isDetails={true} restaurant={restaurant} isNavigate={route} />
             <ScrollView style={{ height: 100 }}>
-                <List.Section title="Restaurant Information">
+                {details.opening_hours && <List.Section title="Restaurant Information">
                     <List.Accordion
                         title="Opening hours"
                         left={props => <List.Icon {...props} icon="food" />}>
                         {details.opening_hours.weekday_text.map((day, idx) => <List.Item style={{ color: 'black' }} title={day} key={idx} />)}
                     </List.Accordion>
-                </List.Section>
+                </List.Section>}
             </ScrollView>
             <View style={styles.navCon}>
+                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.mapsBtn} activeOpacity={0.8}>
+                    <Ionicons name='arrow-back' size={28} color='black' />
+                </TouchableOpacity>
                 <TouchableOpacity onPress={() => Linking.openURL(details.url)} style={styles.mapsBtn} activeOpacity={0.8}>
                     <Image style={styles.navImg} source={mapsIcon} />
                 </TouchableOpacity>
@@ -108,7 +111,7 @@ const styles = StyleSheet.create({
 //     "icon_background_color": "#4B96F3",
 //     "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/shopping_pinlet",
 //     "name": "Westfield San Francisco Centre", "opening_hours": { "open_now": false },
-//     "photos": ["https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=Aap_uEDsIRIA6W_JutUNt787DA4VEd9QXodUQxAdgQykxMhFVdhykbELRJaurMHjURsBit8YH4oOENFvYWPhhZY0ViC6SeH6ba-eZCFc8eVZTFnBthrqWQzOwUSIEAoTktjHkixHG3vRAq-PELKgH-QaqH-ZSr42F12_zXRIOf_FZYr6Z0OD&key=AIzaSyAuViHJowBExdhvmeG93jbLtfd7IB2AHzQ"],
+//     "photos": ["https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=Aap_uEDsIRIA6W_JutUNt787DA4VEd9QXodUQxAdgQykxMhFVdhykbELRJaurMHjURsBit8YH4oOENFvYWPhhZY0ViC6SeH6ba-eZCFc8eVZTFnBthrqWQzOwUSIEAoTktjHkixHG3vRAq-PELKgH-QaqH-ZSr42F12_zXRIOf_FZYr6Z0OD"],
 //     "place_id": "ChIJ6zMe3oWAhYARaZ33Z1BAMRo",
 //     "plus_code": { "compound_code": "QHMV+JC Yerba Buena, San Francisco, CA, USA", "global_code": "849VQHMV+JC" },
 //     "rating": 4.3, "reference": "ChIJ6zMe3oWAhYARaZ33Z1BAMRo", "scope": "GOOGLE",

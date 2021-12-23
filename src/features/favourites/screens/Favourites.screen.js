@@ -8,7 +8,7 @@ import FavouritesCard from "../../settings/cmps/FavouritesCard.cmp";
 export default function FavouritesScreen({ navigation }) {
     const { favourites } = useContext(FavouritesContext)
 
-    if (!favourites && !favourites.length) return (
+    if (!favourites.length) return (
         <SafeAreaView style={styles.noFavourites}>
             <Text style={styles.noFavouritesTitle}>No favourites found yet</Text>
         </SafeAreaView>)

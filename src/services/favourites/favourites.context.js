@@ -18,9 +18,7 @@ export const FavouritesContextProvider = ({ children }) => {
         if (user && user.uid) isSave ? saveFavourites(favourites, user.uid) : setIsSave(true)
     }, [favourites, user])
 
-    const addFavourites = (rest) => {
-        setFavourites([...favourites, rest])
-    }
+    const addFavourites = (rest) => setFavourites([...favourites, rest])
 
     const removeFavourites = (rest) => setFavourites(favourites.filter((x) => x.place_id !== rest.place_id))
 

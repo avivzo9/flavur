@@ -10,7 +10,7 @@ export default function RestaurantsCard({ restaurant, navigation, isNavigate, is
     const { favourites, addFavourites, removeFavourites } = useContext(FavouritesContext)
     const { name, icon, vicinity, user_ratings_total, opening_hours = false, rating, business_status, place_id } = restaurant
     const isTmpClosed = business_status === "OPERATIONAL" ? true : false
-    const ratingArr = Array.from(new Array(Math.floor(rating)))
+    const ratingArr = rating ? Array.from(new Array(Math.floor(rating))) : null
     const isFavourite = favourites.find((r) => r.place_id === restaurant.place_id)
 
     const formatUserRating = (rate) => rate.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
@@ -34,11 +34,11 @@ export default function RestaurantsCard({ restaurant, navigation, isNavigate, is
                     <Image style={{ width: 20, height: 20 }} source={{ uri: icon }} />
                 </View>
                 <View style={styles.contentCon}>
-                    <View style={styles.ratingCon}>
+                    {(rating && user_ratings_total) && <View style={styles.ratingCon}>
                         {ratingArr.map((_, idx) => <Ionicons key={`star-${place_id}-${idx}`} name={"star"} size={20} color={'#FFBD00'} />)}
                         <Text style={{ fontSize: fontSizes.md }}> {rating} ({formatUserRating(user_ratings_total)})</Text>
-                    </View>
-                    <Text style={{ color: opening_hours.open_now ? 'green' : 'red' }}>{opening_hours.open_now && isTmpClosed ? 'Open now' : 'Closed'}</Text>
+                    </View>}
+                    <Text style={{ color: opening_hours.open_now ? 'green' : 'tomato' }}>{opening_hours.open_now && isTmpClosed ? 'Open now' : 'Closed'}</Text>
                 </View>
             </Card>
         </TouchableOpacity>

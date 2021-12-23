@@ -12,7 +12,7 @@ export default function FavouritesCard({ favourite, navigation }) {
             <View style={styles.content}>
                 <Text style={styles.mainTitle}>{favourite.name}</Text>
                 <Text style={styles.title}>{favourite.vicinity}</Text>
-                <Text style={styles.title}>{favourite.opening_hours.open_now && isTmpClosed ? 'Open now' : 'Closed'}</Text>
+                {favourite.opening_hours && <Text style={styles.title}>{favourite.opening_hours.open_now && isTmpClosed ? 'Open now' : 'Closed'}</Text>}
             </View>
         </TouchableOpacity>
     )

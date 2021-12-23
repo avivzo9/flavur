@@ -12,26 +12,22 @@ import { LocationContext } from '../../../services/location/location.context';
 
 export default function RestaurantsScreen({ navigation }) {
     const { restaurants, isLoading, restaurantError } = useContext(RestaurantsContext)
-    const { locationError } = useContext(LocationContext)
-    const { favourites } = useContext(FavouritesContext)
+    const { locationError, isLocationLoading } = useContext(LocationContext)
 
-    const isErrors = !!restaurantError || !!locationError;
+    const isErrors = (!!restaurantError || !!locationError);
 
-    const [isToggled, setIsToggled] = useState(false)
-
-    if (isLoading) return (<ActivityIndicator style={{ flex: 1 }} animating={true} size="large" color={Colors.red800} />)
+    if (isLoading || isLocationLoading) return (<ActivityIndicator style={{ flex: 1 }} animating={true} size="large" color={Colors.red800} />)
 
     return (
         <SafeAreaView style={styles.container}>
-            <Search isFavouriteToggle={isToggled} onToggle={() => setIsToggled(!isToggled)} />
-            {isToggled && <FavouritesBar navigation={navigation} favourites={favourites} />}
+            <Search />
             {isErrors && <View style={styles.errCon}>
                 <Text style={styles.errorMsg}>Something went wrong retrieving the data.</Text>
                 <Text style={styles.errorMsg}>Try again later.</Text>
             </View>}
             {!isErrors && <FlatList data={restaurants}
                 renderItem={({ item, idx }) => <FadeInView>
-                    <RestaurantsCard navigation={navigation} restaurant={item} key={`${item.index}-${idx}`} />
+                    <RestaurantsCard navigation={navigation} restaurant={item} key={`${item.place_id}-${idx}`} />
                 </FadeInView>}
                 contentContainerStyle={{ padding: spacing.md }} />}
         </SafeAreaView >

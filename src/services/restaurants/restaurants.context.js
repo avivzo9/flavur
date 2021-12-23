@@ -27,7 +27,7 @@ export const RestaurantsContextProvider = ({ children }) => {
             const details = await getRestaurantDetails(placeId)
             if (!details) {
                 setIsLoading(false)
-                Promise.reject('C\'ant find details')
+                Promise.reject('Can\'t find details')
             }
             setIsLoading(false)
             return details.result;
