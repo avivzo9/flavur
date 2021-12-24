@@ -1,40 +1,54 @@
 import { Slider } from '@miblanchard/react-native-slider';
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import RNSettings from 'react-native-settings';
-import { isLocationOn } from '../../../services/app.config';
+import { changeSearchRadius, isLocationOn, radius } from '../../../services/app.config';
 import { LocationContext } from '../../../services/location/location.context';
+import { RestaurantsContext } from '../../../services/restaurants/restaurants.context';
 import { spacing } from '../../../utils/sizes';
 
 export default function Search({ routeName }) {
     const { keyword, onSearch, initLocation } = useContext(LocationContext)
+    const { initContext } = useContext(RestaurantsContext)
     const [searchKeyword, setSearchKeyword] = useState(keyword)
     const [isLocation, setIsLocation] = useState(null)
-    const [radius, setRadius] = useState(0)
-
-    const search = async (txt) => await onSearch(txt)
+    const [radiusVal, setRadiusVal] = useState(radius)
 
     useEffect(() => {
         isLocationOn().then(res => setIsLocation(res))
         setSearchKeyword(keyword)
     }, [keyword])
 
+    const search = async (txt) => await onSearch(txt)
+
+    const onChangeRadius = () => {
+        changeSearchRadius(radiusVal)
+        initContext()
+    }
+
     return (
         <View style={routeName === 'map' ? styles.searchMapCon : styles.searchCon}>
             <Searchbar placeholder="Search..." value={searchKeyword}
                 icon={isLocation == RNSettings.ENABLED ? 'map-marker-outline' : 'map-marker-off'}
-                onIconPress={initLocation}
+                onIconPress={() => initLocation(true)}
                 onSubmitEditing={() => search(searchKeyword)}
                 onChangeText={(txt) => setSearchKeyword(txt)}
             />
-            <Slider
-                value={radius}
-                onValueChange={value => setRadius(value)}
-                animateTransitions={true}
-                trackStyle={{ backgroundColor: 'grey' }}
-                thumbStyle={{ backgroundColor: 'tomato' }}
-            />
+            <View style={styles.radiusCon}>
+                <Slider
+                    value={radius}
+                    onValueChange={value => setRadiusVal(value)}
+                    onSlidingComplete={onChangeRadius}
+                    animateTransitions={true}
+                    thumbStyle={{ backgroundColor: 'tomato' }}
+                    minimumValue={0.1}
+                    maximumValue={0.9}
+                    step={0.2}
+                    style={styles.radius}
+                    width={'109%'}
+                />
+            </View>
         </View>
     )
 };
@@ -42,6 +56,7 @@ export default function Search({ routeName }) {
 const styles = StyleSheet.create({
     searchCon: {
         padding: spacing.md,
+        paddingBottom: 0
     },
     searchMapCon: {
         padding: spacing.md,
@@ -49,4 +64,12 @@ const styles = StyleSheet.create({
         zIndex: 999,
         width: '100%'
     },
+    radiusCon: {
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: spacing.md,
+        paddingBottom: 0
+    }
 });

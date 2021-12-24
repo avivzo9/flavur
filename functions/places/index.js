@@ -3,9 +3,9 @@ const url = require('url')
 const functions = require('firebase-functions');
 const { default: axios } = require('axios');
 
+const KEY = functions.config().google.key
 module.exports.placesRequest = (request, response, client) => {
-    const KEY = functions.config()
-    const { location, mock } = url.parse(request.url, true).query;
+    const { location, mock, radius } = url.parse(request.url, true).query;
     if (mock === 'true') {
         const data = mocks[location]
         if (!data) return
@@ -15,9 +15,9 @@ module.exports.placesRequest = (request, response, client) => {
         client.placesNearby({
             params: {
                 location,
-                radius: 3000, //Meter
+                radius,
                 type: 'restaurant',
-                key: functions.config().google.key
+                key: KEY
             },
             timeout: 1000,
         }).then((res) => {
@@ -27,7 +27,7 @@ module.exports.placesRequest = (request, response, client) => {
                     .catch((err) => response.json(err))
             }
             else {
-                res.data.results = res.data.results.map((rest) => addGoogleImage(rest))
+                res.data.results = res.data.results.map((rest) => addGoogleImages(rest))
                 response.json(res.data)
             }
         }).catch(() => {
@@ -38,24 +38,18 @@ module.exports.placesRequest = (request, response, client) => {
     }
 }
 
-// Haifa - 32.794046%2C34.989571
-// Tel Aviv - 32.0853%2C34.781768
-
-const addGoogleImage = (rest) => {
+const addGoogleImages = (rest) => {
     if (!rest.photos || !rest.photos[0] || !rest.photos[0].photo_reference) return
-    else {
-        const ref = rest.photos[0].photo_reference
-        rest.photos = [`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${ref}&key=${functions.config().google.key}`]
-    }
+    else rest.photos = rest.photos.map(p => `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${p.photo_reference}&key=${KEY}`)
     return rest;
 }
 
 const getPlacesByUrl = async () => {
     try {
-        const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=32.794046%2C34.989571&radius=1500&type=restaurant&key=${functions.config().google.key}`
+        const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=32.794046%2C34.989571&radius=1500&type=restaurant&key=${KEY}`
         const res = await axios.get(url);
         const places = res.data.results;
-        places.map((rest) => addGoogleImage(rest));
+        places.map((rest) => addGoogleImages(rest));
         return places;
     } catch (err) {
         return err;

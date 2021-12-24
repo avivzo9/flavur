@@ -6,49 +6,52 @@ export const RestaurantsContext = createContext()
 
 export const RestaurantsContextProvider = ({ children }) => {
     const [restaurants, setRestaurants] = useState([])
-    const [isLoading, setIsLoading] = useState(false)
+    const [restaurantLoading, setRestaurantLoading] = useState(true)
     const [restaurantError, setRestaurantError] = useState(null)
     const { location } = useContext(LocationContext)
 
     const retrieveRestaurants = async (loc) => {
-        setIsLoading(true)
+        setRestaurantLoading(true)
         getRestaurants(loc).then((res) => {
             setRestaurants(res)
-            setIsLoading(false)
+            setRestaurantLoading(false)
         }).catch((err) => {
             setRestaurantError(err)
-            setIsLoading(false)
+            setRestaurantLoading(false)
         })
     }
 
     const searchRestaurantDetails = async (placeId) => {
         try {
-            setIsLoading(true)
+            setRestaurantLoading(true)
             const details = await getRestaurantDetails(placeId)
             if (!details) {
-                setIsLoading(false)
+                setRestaurantLoading(false)
                 Promise.reject('Can\'t find details')
             }
-            setIsLoading(false)
+            setRestaurantLoading(false)
             return details.result;
         } catch (err) {
             setRestaurantError(err)
-            setIsLoading(false)
+            setRestaurantLoading(false)
         }
     }
 
+    const initContext = () => {
+        const { lat, lng } = location.geometry.location
+        setRestaurants([])
+        const locationStr = `${lat},${lng}`
+        retrieveRestaurants(locationStr)
+    }
 
     useEffect(() => {
         if (location) {
-            const { lat, lng } = location.geometry.location
-            setRestaurants([])
-            const locationStr = `${lat},${lng}`
-            retrieveRestaurants(locationStr)
+            initContext()
         }
     }, [location])
 
     return (
-        <RestaurantsContext.Provider value={{ restaurants, isLoading, restaurantError, searchRestaurantDetails }}>
+        <RestaurantsContext.Provider value={{ restaurants, initContext, restaurantLoading, restaurantError, searchRestaurantDetails }}>
             {children}
         </RestaurantsContext.Provider>
     )

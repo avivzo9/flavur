@@ -1,22 +1,20 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { RestaurantsContext } from '../../../services/restaurants/restaurants.context';
 import { fontSizes, spacing } from '../../../utils/sizes';
 import RestaurantsCard from '../cmps/RestaurantsCard.cmp';
 import { ActivityIndicator, Colors } from 'react-native-paper';
 import Search from '../cmps/Search.cmp';
-import { FavouritesContext } from '../../../services/favourites/favourites.context';
-import FavouritesBar from '../../favourites/cmps/FavouritesBar.cmp';
 import FadeInView from '../../animations/fade.animation';
 import { LocationContext } from '../../../services/location/location.context';
 
 export default function RestaurantsScreen({ navigation }) {
-    const { restaurants, isLoading, restaurantError } = useContext(RestaurantsContext)
+    const { restaurants, restaurantLoading, restaurantError } = useContext(RestaurantsContext)
     const { locationError, isLocationLoading } = useContext(LocationContext)
 
     const isErrors = (!!restaurantError || !!locationError);
 
-    if (isLoading || isLocationLoading) return (<ActivityIndicator style={{ flex: 1 }} animating={true} size="large" color={Colors.red800} />)
+    if (restaurantLoading || isLocationLoading) return (<ActivityIndicator style={{ flex: 1 }} animating={true} size="large" color={Colors.red800} />)
 
     return (
         <SafeAreaView style={styles.container}>

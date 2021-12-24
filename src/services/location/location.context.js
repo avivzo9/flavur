@@ -12,24 +12,30 @@ export const LocationContextProvider = ({ children }) => {
     const [location, setLocation] = useState(null)
     const [isLocationLoading, setIsLocationLoading] = useState(false)
     const [locationError, setLocationError] = useState(null)
-    const [keyword, setKeyword] = useState('Tel Aviv')
+    const [keyword, setKeyword] = useState('Antwerp')
+    // const [keyword, setKeyword] = useState('Tel Aviv')
+    const [isMount, setIsMount] = useState(true)
 
     useEffect(() => {
         initLocation()
     }, [])
 
     useEffect(() => {
-        if (keyword.length) search()
+        if (isMount) {
+            if (keyword.length) search()
+        }
+
+        return () => setIsMount(false)
     }, [keyword])
 
-    const initLocation = async () => {
+    const initLocation = async (isAlert) => {
         setIsLocationLoading(true)
         const isLocation = await isLocationOn()
-        if (isLocation != RNSettings.ENABLED) locationAlert()
+        if (isLocation != RNSettings.ENABLED) isAlert ? locationAlert() : null
         else await getCurrLocation()
         setIsLocationLoading(false)
     }
-    
+
     const getCurrLocation = async () => {
         const location = await GetLocation.getCurrentPosition({ enableHighAccuracy: true, timeout: 15000 })
         if (!location) {

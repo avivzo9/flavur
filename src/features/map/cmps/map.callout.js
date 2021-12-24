@@ -7,7 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 export default function MapCallout({ restaurant }) {
     const { name, photos, opening_hours = false, rating, business_status, place_id } = restaurant
     const isTmpClosed = business_status === "OPERATIONAL" ? true : false
-    const ratingArr = Array.from(new Array(Math.floor(rating)))
+    const ratingArr = rating ? Array.from(new Array(Math.floor(rating))) : null
 
     return (
         <View style={styles.cardCon}>
@@ -17,10 +17,10 @@ export default function MapCallout({ restaurant }) {
             </View>
             <Text style={styles.title}>{name}</Text>
             <View style={styles.contentCon}>
-                <View style={styles.ratingCon}>
+                {rating && <View style={styles.ratingCon}>
                     {ratingArr.map((_, idx) => <Ionicons key={`star-${place_id}-${idx}`} name={"star"} size={20} color={'#FFBD00'} />)}
                     <Text style={{ fontSize: fontSizes.md }}> {rating}</Text>
-                </View>
+                </View>}
                 <Text style={{ color: opening_hours.open_now ? 'green' : 'red' }}>{opening_hours.open_now && isTmpClosed ? 'Open now' : 'Closed'}</Text>
             </View>
         </View>

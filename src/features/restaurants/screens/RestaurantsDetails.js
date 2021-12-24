@@ -1,42 +1,59 @@
 import React, { useContext, useEffect, useState } from "react"
-import { Image, Linking, StyleSheet, View } from "react-native";
+import { Image, Linking, StyleSheet, Text, View } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import { List } from "react-native-paper";
+import { Divider, List } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { RestaurantsContext } from "../../../services/restaurants/restaurants.context";
-import { spacing } from "../../../utils/sizes";
+import { fontSizes, spacing } from "../../../utils/sizes";
 import RestaurantsCard from "../cmps/RestaurantsCard.cmp";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { ActivityIndicator, Colors } from 'react-native-paper';
+import { isDarkMode } from "../../../services/app.config";
+import RestaurantReview from "../cmps/RestaurantsReview";
 
 const mapsIcon = require('../../../assets/icons/google_maps_icon.png')
 const wazeIcon = require('../../../assets/icons/waze_icon.png')
 
 export default function RestaurantsDetails({ navigation, route }) {
-    const { searchRestaurantDetails } = useContext(RestaurantsContext)
+    const { searchRestaurantDetails, restaurantLoading } = useContext(RestaurantsContext)
     const { restaurant } = route.params
 
     const [details, setDetails] = useState(null)
+    const [isLoading, setIsLoading] = useState(true)
 
     const getDetails = async (placeId) => setDetails(await searchRestaurantDetails(placeId))
 
     useEffect(() => {
-        if (restaurant) getDetails(restaurant.place_id)
+        if (restaurant) getDetails(restaurant.place_id).then(() => setIsLoading(false))
     }, [restaurant])
 
-    if (!details) return (<ActivityIndicator style={{ flex: 1 }} animating={true} size="large" color={Colors.red800} />)
+    if (isLoading || restaurantLoading) return (<ActivityIndicator style={{ flex: 1 }} animating={true} size="large" color={Colors.red800} />)
+    if (!details) return (<View><Text>There was a problem getting this restaurant information</Text></View>)
 
     return (
         <SafeAreaView style={{ height: '100%' }}>
-            <RestaurantsCard isDetails={true} restaurant={restaurant} isNavigate={route} />
+            <RestaurantsCard route={route.name} isDetails={true} restaurant={restaurant} isNavigate={route} />
             <ScrollView style={{ height: 100 }}>
-                {details.opening_hours && <List.Section title="Restaurant Information">
-                    <List.Accordion
-                        title="Opening hours"
-                        left={props => <List.Icon {...props} icon="food" />}>
-                        {details.opening_hours.weekday_text.map((day, idx) => <List.Item style={{ color: 'black' }} title={day} key={idx} />)}
-                    </List.Accordion>
-                </List.Section>}
+                {details.opening_hours && <>
+                    <View style={styles.headerCon}>
+                        <Ionicons name='information-circle-outline' size={28} color={isDarkMode ? 'white' : 'black'} />
+                        <Text style={styles.header}>Information</Text>
+                    </View>
+                    <List.Section>
+                        <List.Accordion
+                            title="Opening hours"
+                            left={props => <List.Icon {...props} icon="food" />}>
+                            {details.opening_hours.weekday_text.map((day, idx) => <List.Item style={styles.item} title={day} key={day + idx} />)}
+                        </List.Accordion>
+                    </List.Section>
+                </>}
+                {!!details.reviews.length && <View>
+                    <View style={styles.headerCon}>
+                        <Ionicons name='star-outline' size={28} color={isDarkMode ? 'white' : 'black'} />
+                        <Text style={styles.header}>Reviews</Text>
+                    </View>
+                    {details.reviews.map((review, idx) => <><Divider key={`divider-${review.author_name + idx}`} /><RestaurantReview key={review.author_name + idx} review={review} /></>)}
+                </View>}
             </ScrollView>
             <View style={styles.navCon}>
                 <TouchableOpacity onPress={() => navigation.goBack()} style={styles.mapsBtn} activeOpacity={0.8}>
@@ -57,7 +74,7 @@ export default function RestaurantsDetails({ navigation, route }) {
                     <Ionicons name='call' size={28} color='black' />
                 </TouchableOpacity>
             </View>
-        </SafeAreaView>
+        </SafeAreaView >
     )
 }
 
@@ -102,20 +119,18 @@ const styles = StyleSheet.create({
         height: '100%',
         borderRadius: 50,
     },
+    item: {
+        color: isDarkMode ? 'white' : 'black',
+    },
+    headerCon: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: spacing.md,
+    },
+    header: {
+        color: isDarkMode ? 'white' : 'black',
+        fontSize: fontSizes.md,
+        padding: spacing.sm,
+        fontWeight: 'bold'
+    },
 })
-
-
-// {
-//     "business_status": "OPERATIONAL", "geometry": { "details.geometry.location": { "lat": 37.7841178, "lng": -122.4063857 }, "viewport": { "northeast": [Object], "southwest": [Object] } },
-//     "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/shopping-71.png",
-//     "icon_background_color": "#4B96F3",
-//     "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/shopping_pinlet",
-//     "name": "Westfield San Francisco Centre", "opening_hours": { "open_now": false },
-//     "photos": ["https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=Aap_uEDsIRIA6W_JutUNt787DA4VEd9QXodUQxAdgQykxMhFVdhykbELRJaurMHjURsBit8YH4oOENFvYWPhhZY0ViC6SeH6ba-eZCFc8eVZTFnBthrqWQzOwUSIEAoTktjHkixHG3vRAq-PELKgH-QaqH-ZSr42F12_zXRIOf_FZYr6Z0OD"],
-//     "place_id": "ChIJ6zMe3oWAhYARaZ33Z1BAMRo",
-//     "plus_code": { "compound_code": "QHMV+JC Yerba Buena, San Francisco, CA, USA", "global_code": "849VQHMV+JC" },
-//     "rating": 4.3, "reference": "ChIJ6zMe3oWAhYARaZ33Z1BAMRo", "scope": "GOOGLE",
-//     "types": ["shopping_mall", "department_store", "movie_theater", "shoe_store", "restaurant", "food", "point_of_interest", "clothing_store", "store", "establishment"],
-//     "user_ratings_total": 17335,
-//     "vicinity": "865 Market Street, San Francisco"
-// }

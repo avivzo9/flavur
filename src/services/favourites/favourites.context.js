@@ -22,6 +22,8 @@ export const FavouritesContextProvider = ({ children }) => {
 
     const removeFavourites = (rest) => setFavourites(favourites.filter((x) => x.place_id !== rest.place_id))
 
+    const clearFavourites = () => setFavourites([])
+
     const saveFavourites = async (value, id) => {
         try {
             await AsyncStorage.setItem(KEY + id, JSON.stringify(value))
@@ -40,7 +42,7 @@ export const FavouritesContextProvider = ({ children }) => {
     }
 
     return (
-        <FavouritesContext.Provider value={{ favourites, addFavourites, removeFavourites }}>
+        <FavouritesContext.Provider value={{ favourites, clearFavourites, addFavourites, removeFavourites }}>
             {children}
         </FavouritesContext.Provider>
     )
