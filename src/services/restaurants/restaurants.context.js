@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { AppConfigContext } from '../appConfig/appConfig.context';
 import { LocationContext } from '../location/location.context';
 import { getRestaurantDetails, getRestaurants } from './restaurants.service';
 
@@ -8,11 +9,13 @@ export const RestaurantsContextProvider = ({ children }) => {
     const [restaurants, setRestaurants] = useState([])
     const [restaurantLoading, setRestaurantLoading] = useState(true)
     const [restaurantError, setRestaurantError] = useState(null)
+    const { isMock } = useContext(AppConfigContext)
     const { location } = useContext(LocationContext)
+    const { isLocation } = useContext(AppConfigContext)
 
     const retrieveRestaurants = async (loc) => {
         setRestaurantLoading(true)
-        getRestaurants(loc).then((res) => {
+        getRestaurants(loc, isMock).then((res) => {
             setRestaurants(res)
             setRestaurantLoading(false)
         }).catch((err) => {
@@ -48,7 +51,7 @@ export const RestaurantsContextProvider = ({ children }) => {
         if (location) {
             initContext()
         }
-    }, [location])
+    }, [location, isLocation])
 
     return (
         <RestaurantsContext.Provider value={{ restaurants, initContext, restaurantLoading, restaurantError, searchRestaurantDetails }}>

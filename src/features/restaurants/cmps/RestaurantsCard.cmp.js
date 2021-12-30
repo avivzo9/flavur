@@ -4,18 +4,23 @@ import { Card, Paragraph } from 'react-native-paper';
 import { fontSizes, spacing } from '../../../utils/sizes';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { FavouritesContext } from '../../../services/favourites/favourites.context';
-import { isDarkMode } from '../../../services/app.config';
+import { AppConfigContext } from '../../../services/appConfig/appConfig.context';
 
 let routeName = null
+let darkMode = null
 
 export default function RestaurantsCard({ restaurant, navigation, route, isNavigate, isDetails }) {
     const { favourites, addFavourites, removeFavourites } = useContext(FavouritesContext)
+    const { isDarkMode } = useContext(AppConfigContext)
     const { name, icon, vicinity, user_ratings_total, opening_hours = false, rating, business_status, place_id } = restaurant
     const isTmpClosed = business_status === "OPERATIONAL" ? true : false
     const ratingArr = rating ? Array.from(new Array(Math.floor(rating))) : null
     const isFavourite = favourites.find((r) => r.place_id === restaurant.place_id)
 
-    useEffect(() => routeName = route, [])
+    useEffect(() => {
+        routeName = route
+        darkMode = isDarkMode
+    }, [isDarkMode])
 
     const formatUserRating = (rate) => rate.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 
@@ -51,12 +56,12 @@ export default function RestaurantsCard({ restaurant, navigation, route, isNavig
 
 const styles = StyleSheet.create({
     container: {
-        marginBottom: routeName === 'RestaurantDetails' ? 0 : spacing.md,
+        marginBottom: (routeName === 'RestaurantDetails') ? 0 : spacing.md,
         borderRadius: 10
     },
     title: {
         fontFamily: 'Oswald-VariableFont_wght',
-        color: isDarkMode ? 'white' : 'black',
+        color: darkMode ? 'white' : 'black',
         fontSize: 20,
         padding: spacing.md,
         paddingBottom: 0

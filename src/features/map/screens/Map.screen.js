@@ -7,7 +7,7 @@ import { RestaurantsContext } from "../../../services/restaurants/restaurants.co
 import Search from "../../restaurants/cmps/Search.cmp";
 import MapCallout from "../cmps/map.callout";
 
-export default function MapScreen({ route }) {
+export default function MapScreen({ route, navigation }) {
     const { location } = useContext(LocationContext)
     const { restaurants, restaurantLoading } = useContext(RestaurantsContext)
     const { viewport } = location.geometry
@@ -35,7 +35,7 @@ export default function MapScreen({ route }) {
                     title={rest.name}
                     coordinate={{ latitude: rest.geometry.location.lat, longitude: rest.geometry.location.lng }}
                 >
-                    <MapView.Callout>
+                    <MapView.Callout onPress={() => navigation.navigate('RestaurantDetails', { restaurant: rest })}>
                         <MapCallout restaurant={rest} />
                     </MapView.Callout>
                 </Marker>)}

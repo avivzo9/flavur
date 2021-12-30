@@ -24,7 +24,7 @@ export default function RestaurantsScreen({ navigation }) {
                 <Text style={styles.errorMsg}>Try again later.</Text>
             </View>}
             {!isErrors && <FlatList data={restaurants}
-                renderItem={({ item, idx }) => <FadeInView>
+                renderItem={({ item, idx }) => <FadeInView duration={500}>
                     <RestaurantsCard navigation={navigation} restaurant={item} key={`${item.place_id}-${idx}`} />
                 </FadeInView>}
                 contentContainerStyle={{ padding: spacing.md }} />}

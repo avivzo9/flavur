@@ -1,10 +1,9 @@
 import { loadFromStorage, saveToStorage } from "../../utils/storage";
-import { isMock, radius } from "../app.config";
 const noImage = require('../../assets/imgs/no_image.png')
 
 const KEY = '@restaurants'
 
-export async function getRestaurants(location) {
+export async function getRestaurants(location, isMock) {
     try {
         const storage = await loadFromStorage(KEY + location)
         if (!storage && !isMock) {

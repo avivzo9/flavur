@@ -1,20 +1,28 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/core";
-import React, { useCallback, useContext, useState } from "react"
+import React, { useCallback, useContext, useEffect, useState } from "react"
 import { Alert, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Avatar, List } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { isDarkMode } from "../../../services/app.config";
+import { AppConfigContext } from "../../../services/appConfig/appConfig.context";
 import { AuthContext } from "../../../services/auth/auth.context";
 import { FavouritesContext } from "../../../services/favourites/favourites.context";
-import { fontSizes, spacing } from "../../../utils/sizes";
+import { spacing } from "../../../utils/sizes";
+import FadeInView from "../../animations/fade.animation";
+
+let darkMode = null
 
 export default function SettingsScreen({ navigation }) {
+    const { isDarkMode, isMock, setIsMock } = useContext(AppConfigContext)
     const { user, logout } = useContext(AuthContext)
     const { clearFavourites } = useContext(FavouritesContext)
 
     const [profilePhoto, setProfilePhoto] = useState(null)
+
+    useEffect(() => {
+        darkMode = isDarkMode
+    }, [isDarkMode])
 
     useFocusEffect(
         useCallback(() => {
@@ -63,33 +71,42 @@ export default function SettingsScreen({ navigation }) {
                 </TouchableOpacity>
                 <Text style={styles.avatarEmail}>{user.email}</Text>
             </View>
-            <List.Section>
-                <List.Item
-                    style={styles.item}
-                    title="Clear Favourites"
-                    description="Delete all of your favourites"
-                    left={(props) => <List.Icon {...props} color="black" icon='trash-can' />}
-                    onPress={() => onClearFavourites()}
-                />
-                {/* <List.Item
+            <FadeInView>
+                <List.Section>
+                    <List.Item
+                        style={styles.item}
+                        title="Clear Favourites"
+                        description="Delete all of your favourites"
+                        left={(props) => <List.Icon {...props} color="black" icon='trash-can' />}
+                        onPress={() => onClearFavourites()}
+                    />
+                    {/* <List.Item
                     style={styles.item}
                     title="Search History"
                     left={(props) => <List.Icon {...props} color="black" icon='history' />}
                     onPress={() => null}
                 /> */}
-                {/* <List.Item
-                    style={styles.item}
-                    title="Clear Storage"
-                    left={(props) => <List.Icon {...props} color="black" icon='trash-can' />}
-                    onPress={() => AsyncStorage.clear()}
-                /> */}
-                <List.Item
-                    style={styles.item}
-                    title="Logout"
-                    left={(props) => <List.Icon {...props} color="black" icon='login' />}
-                    onPress={() => onLogout()}
-                />
-            </List.Section>
+                    {user.email === 'avivzo9@gmail.com' && <><List.Item
+                        style={styles.item}
+                        title="Clear Storage"
+                        left={(props) => <List.Icon {...props} color="black" icon='trash-can' />}
+                        onPress={() => AsyncStorage.clear()}
+                    />
+                        <List.Item
+                            style={styles.item}
+                            title="Toggle Mock Mode"
+                            description={`Mock Mode is ${isMock ? 'on' : 'off'}`}
+                            left={(props) => <List.Icon {...props} color="black" icon={isMock ? 'toggle-switch' : 'toggle-switch-off'} />}
+                            onPress={() => setIsMock(!isMock)}
+                        /></>}
+                    <List.Item
+                        style={styles.item}
+                        title="Logout"
+                        left={(props) => <List.Icon {...props} color="black" icon='login' />}
+                        onPress={() => onLogout()}
+                    />
+                </List.Section>
+            </FadeInView>
         </SafeAreaView>
     )
 }
@@ -111,7 +128,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Oswald-VariableFont_wght',
     },
     item: {
-        color: isDarkMode ? 'white' : 'black',
+        color: darkMode ? 'white' : 'black',
         padding: spacing.md
     },
 });

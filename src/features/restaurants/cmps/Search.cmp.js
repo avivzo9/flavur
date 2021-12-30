@@ -1,43 +1,41 @@
-import { Slider } from '@miblanchard/react-native-slider';
 import React, { useContext, useEffect, useState } from 'react';
+import { Slider } from '@miblanchard/react-native-slider';
 import { StyleSheet, View } from 'react-native';
 import { Searchbar } from 'react-native-paper';
-import RNSettings from 'react-native-settings';
-import { changeSearchRadius, isLocationOn, radius } from '../../../services/app.config';
+import { AppConfigContext } from '../../../services/appConfig/appConfig.context';
 import { LocationContext } from '../../../services/location/location.context';
 import { RestaurantsContext } from '../../../services/restaurants/restaurants.context';
 import { spacing } from '../../../utils/sizes';
 
 export default function Search({ routeName }) {
+    const { setSearchRadius, isLocation, searchRadius } = useContext(AppConfigContext)
     const { keyword, onSearch, initLocation } = useContext(LocationContext)
     const { initContext } = useContext(RestaurantsContext)
     const [searchKeyword, setSearchKeyword] = useState(keyword)
-    const [isLocation, setIsLocation] = useState(null)
-    const [radiusVal, setRadiusVal] = useState(radius)
+    const [radiusVal, setRadiusVal] = useState(searchRadius)
 
     useEffect(() => {
-        isLocationOn().then(res => setIsLocation(res))
         setSearchKeyword(keyword)
     }, [keyword])
 
     const search = async (txt) => await onSearch(txt)
 
     const onChangeRadius = () => {
-        changeSearchRadius(radiusVal)
+        // setSearchRadius(radiusVal)
         initContext()
     }
 
     return (
         <View style={routeName === 'map' ? styles.searchMapCon : styles.searchCon}>
             <Searchbar placeholder="Search..." value={searchKeyword}
-                icon={isLocation == RNSettings.ENABLED ? 'map-marker-outline' : 'map-marker-off'}
+                icon={isLocation ? 'map-marker-outline' : 'map-marker-off'}
                 onIconPress={() => initLocation(true)}
                 onSubmitEditing={() => search(searchKeyword)}
                 onChangeText={(txt) => setSearchKeyword(txt)}
             />
             <View style={styles.radiusCon}>
                 <Slider
-                    value={radius}
+                    value={searchRadius}
                     onValueChange={value => setRadiusVal(value)}
                     onSlidingComplete={onChangeRadius}
                     animateTransitions={true}

@@ -17,11 +17,11 @@ export default function MapCallout({ restaurant }) {
             </View>
             <Text style={styles.title}>{name}</Text>
             <View style={styles.contentCon}>
+                <Text style={{ color: opening_hours.open_now ? 'green' : 'red' }}>{opening_hours.open_now && isTmpClosed ? 'Open now' : 'Closed'}</Text>
                 {rating && <View style={styles.ratingCon}>
                     {ratingArr.map((_, idx) => <Ionicons key={`star-${place_id}-${idx}`} name={"star"} size={20} color={'#FFBD00'} />)}
                     <Text style={{ fontSize: fontSizes.md }}> {rating}</Text>
                 </View>}
-                <Text style={{ color: opening_hours.open_now ? 'green' : 'red' }}>{opening_hours.open_now && isTmpClosed ? 'Open now' : 'Closed'}</Text>
             </View>
         </View>
     )
@@ -30,20 +30,16 @@ export default function MapCallout({ restaurant }) {
 const styles = StyleSheet.create({
     cardCon: {
         paddingTop: 4,
-        paddingBottom: 4,
         maxWidth: 225,
         alignItems: 'center',
-        borderRadius: 10,
     },
     imgCon: {
         width: 225,
         height: 150,
-        borderRadius: 10
     },
     img: {
         width: 225,
         height: 150,
-        borderRadius: 10,
     },
     title: {
         padding: spacing.sm,
@@ -56,7 +52,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         width: '95%',
-        paddingBottom: spacing.sm
     },
     ratingCon: {
         flexDirection: 'row'

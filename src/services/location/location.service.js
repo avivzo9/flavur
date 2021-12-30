@@ -1,9 +1,8 @@
 import { loadFromStorage, saveToStorage } from "../../utils/storage";
-import { isMock } from "../app.config";
 
 const KEY = '@location'
 
-export async function getLocation(search) {
+export async function getLocation(search, isMock) {
     try {
         const storage = await loadFromStorage(KEY + search)
         if (!storage && !isMock) {

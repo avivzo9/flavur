@@ -8,13 +8,16 @@ import { fontSizes, spacing } from "../../../utils/sizes";
 import RestaurantsCard from "../cmps/RestaurantsCard.cmp";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { ActivityIndicator, Colors } from 'react-native-paper';
-import { isDarkMode } from "../../../services/app.config";
 import RestaurantReview from "../cmps/RestaurantsReview";
+import { AppConfigContext } from "../../../services/appConfig/appConfig.context";
 
 const mapsIcon = require('../../../assets/icons/google_maps_icon.png')
 const wazeIcon = require('../../../assets/icons/waze_icon.png')
 
+let darkMode = null
+
 export default function RestaurantsDetails({ navigation, route }) {
+    const { isDarkMode } = useContext(AppConfigContext)
     const { searchRestaurantDetails, restaurantLoading } = useContext(RestaurantsContext)
     const { restaurant } = route.params
 
@@ -22,6 +25,10 @@ export default function RestaurantsDetails({ navigation, route }) {
     const [isLoading, setIsLoading] = useState(true)
 
     const getDetails = async (placeId) => setDetails(await searchRestaurantDetails(placeId))
+
+    useEffect(() => {
+        darkMode = isDarkMode
+    }, [isDarkMode])
 
     useEffect(() => {
         if (restaurant) getDetails(restaurant.place_id).then(() => setIsLoading(false))
@@ -52,7 +59,7 @@ export default function RestaurantsDetails({ navigation, route }) {
                         <Ionicons name='star-outline' size={28} color={isDarkMode ? 'white' : 'black'} />
                         <Text style={styles.header}>Reviews</Text>
                     </View>
-                    {details.reviews.map((review, idx) => <><Divider key={`divider-${review.author_name + idx}`} /><RestaurantReview key={review.author_name + idx} review={review} /></>)}
+                    {details.reviews.map((review, idx) => <><Divider key={`divider-${review.author_name + idx}`} /><RestaurantReview isDarkMode={isDarkMode} key={review.author_name + idx} review={review} /></>)}
                 </View>}
             </ScrollView>
             <View style={styles.navCon}>
@@ -120,7 +127,7 @@ const styles = StyleSheet.create({
         borderRadius: 50,
     },
     item: {
-        color: isDarkMode ? 'white' : 'black',
+        color: darkMode ? 'white' : 'black',
     },
     headerCon: {
         flexDirection: 'row',
@@ -128,7 +135,7 @@ const styles = StyleSheet.create({
         padding: spacing.md,
     },
     header: {
-        color: isDarkMode ? 'white' : 'black',
+        color: darkMode ? 'white' : 'black',
         fontSize: fontSizes.md,
         padding: spacing.sm,
         fontWeight: 'bold'

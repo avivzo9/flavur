@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
-import { isDarkMode } from "../../../services/app.config";
 import { fontSizes, spacing } from "../../../utils/sizes";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-export default function RestaurantReview({ review }) {
+let darkMode = null
+
+export default function RestaurantReview({ review, isDarkMode }) {
     const ratingArr = review.rating ? Array.from(new Array(Math.floor(review.rating))) : null
+
+    useEffect(() => {
+        darkMode = isDarkMode
+    }, [isDarkMode])
 
     return (
         <View style={styles.container}>
@@ -41,7 +46,7 @@ const styles = StyleSheet.create({
         marginRight: spacing.md,
     },
     profileName: {
-        color: isDarkMode ? 'white' : 'black',
+        color: darkMode ? 'white' : 'black',
         fontWeight: "bold",
         fontSize: fontSizes.md
     },
@@ -52,13 +57,13 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     ratingTxt: {
-        color: isDarkMode ? 'white' : 'black',
+        color: darkMode ? 'white' : 'black',
         padding: spacing.md,
         paddingLeft: 0,
         fontSize: fontSizes.md
     },
     reviewTxt: {
-        color: isDarkMode ? 'white' : 'black',
+        color: darkMode ? 'white' : 'black',
         fontSize: fontSizes.md,
         padding: spacing.md,
     },
