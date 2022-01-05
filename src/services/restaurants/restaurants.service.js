@@ -3,7 +3,7 @@ const noImage = require('../../assets/imgs/no_image.png')
 
 const KEY = '@restaurants'
 
-export async function getRestaurants(location, isMock) {
+export async function getRestaurants(location, isMock, radius) {
     try {
         const storage = await loadFromStorage(KEY + location)
         if (!storage && !isMock) {

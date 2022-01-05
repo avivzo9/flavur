@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { FavouritesContextProvider } from '../services/favourites/favourites.context';
+import { FavoritesContextProvider } from '../services/favorites/favorites.context';
 import { LocationContextProvider } from '../services/location/location.context';
 import { RestaurantsContextProvider } from '../services/restaurants/restaurants.context';
 import SettingsScreen from '../features/settings/screens/Settings.screen';
@@ -11,7 +11,7 @@ const Stack = createStackNavigator();
 export default function SettingsNavigator() {
 
     return (
-        <FavouritesContextProvider>
+        <FavoritesContextProvider>
             <LocationContextProvider>
                 <RestaurantsContextProvider>
                     <Stack.Navigator>
@@ -20,6 +20,6 @@ export default function SettingsNavigator() {
                     </Stack.Navigator>
                 </RestaurantsContextProvider>
             </LocationContextProvider>
-        </FavouritesContextProvider>
+        </FavoritesContextProvider>
     )
 };

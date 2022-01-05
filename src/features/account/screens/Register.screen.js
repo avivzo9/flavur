@@ -1,8 +1,9 @@
 import React, { useContext, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { ActivityIndicator, Button, Colors, TextInput } from "react-native-paper";
+import { Button, TextInput } from "react-native-paper";
 import { AuthContext } from "../../../services/auth/auth.context";
 import { fontSizes, spacing } from "../../../utils/sizes";
+import Loader from "../../Loader";
 import BackgroundImgView from '../cmps/BackgroundImgView'
 
 export default function RegisterScreen({ navigation }) {
@@ -17,7 +18,7 @@ export default function RegisterScreen({ navigation }) {
                 <Text style={styles.header}>Meals To Go</Text>
             </View>
             {isLoading && <View style={styles.registerCon}>
-                <ActivityIndicator style={{ flex: 1 }} animating={true} size="large" color={Colors.red800} />
+                <Loader />
             </View>}
             {!isLoading && <View style={styles.registerCon}>
                 <TextInput

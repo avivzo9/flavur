@@ -11,11 +11,11 @@ export const RestaurantsContextProvider = ({ children }) => {
     const [restaurantError, setRestaurantError] = useState(null)
     const { isMock } = useContext(AppConfigContext)
     const { location } = useContext(LocationContext)
-    const { isLocation } = useContext(AppConfigContext)
+    const { isLocation, searchRadius } = useContext(AppConfigContext)
 
     const retrieveRestaurants = async (loc) => {
         setRestaurantLoading(true)
-        getRestaurants(loc, isMock).then((res) => {
+        getRestaurants(loc, isMock, searchRadius).then((res) => {
             setRestaurants(res)
             setRestaurantLoading(false)
         }).catch((err) => {

@@ -2,7 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import React, { useContext } from "react";
 import { AppConfigContextProvider } from "../services/appConfig/appConfig.context";
 import { AuthContext } from "../services/auth/auth.context";
-import { FavouritesContextProvider } from "../services/favourites/favourites.context";
+import { FavoritesContextProvider } from "../services/favorites/favorites.context";
 import { LocationContextProvider } from "../services/location/location.context";
 import { RestaurantsContextProvider } from "../services/restaurants/restaurants.context";
 import AccountNavigator from "./AccountNavigator";
@@ -14,13 +14,13 @@ export default function Navigation() {
     return (
         <NavigationContainer>
             <AppConfigContextProvider>
-                <FavouritesContextProvider>
+                <FavoritesContextProvider>
                     <LocationContextProvider>
                         <RestaurantsContextProvider>
                             {user ? <AppNavigator /> : <AccountNavigator />}
                         </RestaurantsContextProvider>
                     </LocationContextProvider>
-                </FavouritesContextProvider>
+                </FavoritesContextProvider>
             </AppConfigContextProvider>
         </NavigationContainer>
     )

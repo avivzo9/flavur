@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react"
 import { StyleSheet } from "react-native";
 import MapView, { Marker } from 'react-native-maps';
-import { ActivityIndicator, Colors } from "react-native-paper";
 import { LocationContext } from "../../../services/location/location.context";
 import { RestaurantsContext } from "../../../services/restaurants/restaurants.context";
+import Loader from "../../Loader";
 import Search from "../../restaurants/cmps/Search.cmp";
 import MapCallout from "../cmps/map.callout";
 
@@ -22,7 +22,7 @@ export default function MapScreen({ route, navigation }) {
         }
     }, [location, viewport])
 
-    if (!latDelta || restaurantLoading) return (<ActivityIndicator style={{ flex: 1 }} animating={true} size="large" color={Colors.red800} />)
+    if (!latDelta || restaurantLoading) return (<Loader />)
     if (!location) return (<MapView style={styles.map} region={{ latitude: 31.4000, longitude: 35.0000, latitudeDelta: (35.0818 - 31.4117), longitudeDelta: 0.1 }} />)
     const { lat, lng } = location.geometry.location
 

@@ -1,21 +1,24 @@
-import React from "react";
-import { createStackNavigator, TransitionPresets } from '@react-navigation/stack'
+import React, { useContext } from "react";
 import RestaurantsScreen from "../../features/restaurants/screens/Restaurants.screen";
-import RestaurantsDetails from "../../features/restaurants/screens/RestaurantsDetails";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import FavouritesScreen from "../../features/favourites/screens/Favourites.screen";
+import FavoritesScreen from "../../features/favorites/screens/Favorites.screen";
 import MapScreen from "../../features/map/screens/Map.screen";
 import SettingsNavigator from "../SettingsNavigator";
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { AppConfigContext } from "../../services/appConfig/appConfig.context";
+import { StyleSheet } from "react-native";
+import { colors } from "../../utils/colors";
 
 const Tab = createBottomTabNavigator();
 const TABS = {
     home: 'restaurant-outline',
-    favourites: 'heart-outline',
+    favorites: 'heart-outline',
     map: 'map-outline',
     settings: 'settings-outline'
 }
+
 export const RestaurantsNavigator = () => {
+    const { isDarkMode } = useContext(AppConfigContext)
 
     const screenOptions = ({ route }) => {
         const iconName = TABS[route.name]
@@ -23,17 +26,24 @@ export const RestaurantsNavigator = () => {
             tabBarIcon: ({ size, color }) => <Ionicons name={iconName} size={size} color={color} />,
             tabBarActiveTintColor: 'tomato',
             tabBarInactiveTintColor: 'grey',
+            tabBarStyle: styles(isDarkMode).tabBarDarkMode,
             headerShown: false,
-            tabBarShowLabel: false
+            tabBarShowLabel: false,
         }
     }
 
     return (
         <Tab.Navigator screenOptions={screenOptions}>
             <Tab.Screen name='home' component={RestaurantsScreen} />
-            <Tab.Screen name="favourites" options={{ title: 'Favourites' }} component={FavouritesScreen} />
+            <Tab.Screen name="favorites" options={{ title: 'Favorites' }} component={FavoritesScreen} />
             <Tab.Screen name="map" options={{ title: 'Map' }} component={MapScreen} />
             <Tab.Screen name="settings" options={{ title: 'Settings' }} component={SettingsNavigator} />
         </Tab.Navigator>
     )
 }
+
+const styles = (isDark) => StyleSheet.create({
+    tabBarDarkMode: {
+        backgroundColor: isDark ? colors.darkMode.dark : colors.darkMode.light
+    }
+})

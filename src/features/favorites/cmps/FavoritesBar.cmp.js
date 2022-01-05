@@ -4,17 +4,17 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { fontSizes, spacing } from '../../../utils/sizes';
 import CompactRestCard from '../../map/cmps/CompactRestCard.cmp';
 
-export default function FavouritesBar({ favourites, navigation }) {
+export default function FavoritesBar({ favorites, navigation }) {
 
     return (
         <>
             <Text style={styles.header}>Favorite Restaurants</Text>
-            {!favourites.length && <View style={styles.container}>
-                <Text style={styles.noFavourites}>There are no favorite restaurants</Text>
+            {!favorites.length && <View style={styles.container}>
+                <Text style={styles.noFavorites}>There are no favorite restaurants</Text>
             </View>}
-            {!!favourites.length && <View style={styles.container}>
+            {!!favorites.length && <View style={styles.container}>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} >
-                    {favourites.map((res) => <View key={res.place_id}>
+                    {favorites.map((res) => <View key={res.place_id}>
                         <TouchableOpacity onPress={() => navigation.navigate('RestaurantDetails', { restaurant: res })} activeOpacity={0.8}>
                             <CompactRestCard restaurant={res} />
                         </TouchableOpacity>
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         width: '100%',
     },
-    noFavourites: {
+    noFavorites: {
         color: 'black',
         fontSize: fontSizes.md
     },

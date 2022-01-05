@@ -6,11 +6,13 @@ import { AppConfigContext } from '../../../services/appConfig/appConfig.context'
 import { LocationContext } from '../../../services/location/location.context';
 import { RestaurantsContext } from '../../../services/restaurants/restaurants.context';
 import { spacing } from '../../../utils/sizes';
+import { colors } from '../../../utils/colors';
 
 export default function Search({ routeName }) {
-    const { setSearchRadius, isLocation, searchRadius } = useContext(AppConfigContext)
+    const { setSearchRadius, isLocation, searchRadius, isDarkMode } = useContext(AppConfigContext)
     const { keyword, onSearch, initLocation } = useContext(LocationContext)
     const { initContext } = useContext(RestaurantsContext)
+
     const [searchKeyword, setSearchKeyword] = useState(keyword)
     const [radiusVal, setRadiusVal] = useState(searchRadius)
 
@@ -21,37 +23,42 @@ export default function Search({ routeName }) {
     const search = async (txt) => await onSearch(txt)
 
     const onChangeRadius = () => {
-        // setSearchRadius(radiusVal)
+        setSearchRadius(radiusVal)
         initContext()
     }
 
     return (
-        <View style={routeName === 'map' ? styles.searchMapCon : styles.searchCon}>
+        <View style={routeName === 'map' ? styles().searchMapCon : styles().searchCon}>
             <Searchbar placeholder="Search..." value={searchKeyword}
                 icon={isLocation ? 'map-marker-outline' : 'map-marker-off'}
+                iconColor={isDarkMode ? colors.darkMode.light : colors.darkMode.dark}
+                inputStyle={{ color: isDarkMode ? colors.darkMode.light : colors.darkMode.dark }}
+                style={styles(isDarkMode).input}
                 onIconPress={() => initLocation(true)}
                 onSubmitEditing={() => search(searchKeyword)}
                 onChangeText={(txt) => setSearchKeyword(txt)}
             />
-            <View style={styles.radiusCon}>
+            <View style={styles().radiusCon}>
                 <Slider
                     value={searchRadius}
                     onValueChange={value => setRadiusVal(value)}
                     onSlidingComplete={onChangeRadius}
                     animateTransitions={true}
                     thumbStyle={{ backgroundColor: 'tomato' }}
+                    minimumTrackTintColor={isDarkMode ? colors.darkMode.light : '#3f3f3f'}
+                    maximumTrackTintColor={isDarkMode ? '#3f3f3f' : '#b3b3b3'}
                     minimumValue={0.1}
                     maximumValue={0.9}
-                    step={0.2}
-                    style={styles.radius}
+                    step={0.4}
                     width={'109%'}
+                    trackClickable={false}
                 />
             </View>
         </View>
     )
 };
 
-const styles = StyleSheet.create({
+const styles = (isDark) => StyleSheet.create({
     searchCon: {
         padding: spacing.md,
         paddingBottom: 0
@@ -69,5 +76,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: spacing.md,
         paddingBottom: 0
-    }
+    },
+    input: {
+        backgroundColor: isDark ? colors.darkMode.topDark : colors.darkMode.light,
+        color: 'white'
+    },
 });
