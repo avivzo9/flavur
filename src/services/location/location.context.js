@@ -16,13 +16,11 @@ export const LocationContextProvider = ({ children }) => {
     const [keyword, setKeyword] = useState(isMock ? 'Antwerp' : 'Tel Aviv')
 
     useEffect(() => {
-        initLocation()
+        if (location) initLocation()
     }, [])
 
     useEffect(() => {
-        if (isSearch) {
-            if (keyword.length) search()
-        }
+        if (isSearch && keyword.length) search(keyword.toLowerCase())
 
         return () => setIsSearch(false)
     }, [keyword])
@@ -32,6 +30,16 @@ export const LocationContextProvider = ({ children }) => {
         if (!isLocation) isAlert ? locationAlert() : null
         else await getCurrLocation()
         setIsLocationLoading(false)
+    }
+
+    const search = async (searchTerm) => {
+        getLocation(searchTerm, isMock).then((res) => {
+            setLocation(res[0])
+            setIsLocationLoading(false)
+        }).catch((err) => {
+            setLocationError(err)
+            setIsLocationLoading(false)
+        })
     }
 
     const getCurrLocation = async () => {
@@ -64,16 +72,6 @@ export const LocationContextProvider = ({ children }) => {
     const onSearch = async (searchTerm) => {
         setIsLocationLoading(true)
         setKeyword(searchTerm)
-    }
-
-    const search = async () => {
-        getLocation(keyword.toLowerCase(), isMock).then((res) => {
-            setLocation(res[0])
-            setIsLocationLoading(false)
-        }).catch((err) => {
-            setLocationError(err)
-            setIsLocationLoading(false)
-        })
     }
 
     return (

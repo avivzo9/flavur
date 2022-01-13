@@ -6,7 +6,7 @@ export const AppConfigContext = createContext()
 
 export const AppConfigContextProvider = ({ children }) => {
     const [searchRadius, setSearchRadius] = useState(0.5)
-    const [isMock, setIsMock] = useState(false)
+    const [isMock, setIsMock] = useState(true)
     const [isLocation, setIsLocation] = useState(false)
     const [isDarkMode, setIsDarkMode] = useState(Appearance.getColorScheme() === 'dark' ? true : false)
 

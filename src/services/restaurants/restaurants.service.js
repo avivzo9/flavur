@@ -6,7 +6,8 @@ const KEY = '@restaurants'
 export async function getRestaurants(location, isMock, radius) {
     try {
         const storage = await loadFromStorage(KEY + location)
-        if (!storage && !isMock) {
+        if (!storage || !isMock) {
+            console.log('Load restaurants from API!');
             const restaurants = await fetch(`https://us-central1-mealstogo-dd9b1.cloudfunctions.net/placesNearBy?location=${location}&mock=${String(isMock)}&radius=${(radius * 10000).toFixed(0)}`)
             const { results } = await restaurants.json();
             if (!results) return Promise.reject('No results found')
@@ -16,9 +17,10 @@ export async function getRestaurants(location, isMock, radius) {
                 else if (!rest.photos) rest.photos = [noImage]
                 if (rest) restsToReturn.push(rest)
             })
-            if (!isMock) await saveToStorage(KEY + location, restsToReturn)
+            if (isMock) await saveToStorage(KEY + location, restsToReturn)
             return restsToReturn;
         }
+        console.log('Load restaurants from storage!');
         return storage;
     } catch (err) {
         console.log('err in getRestaurants:', err)
