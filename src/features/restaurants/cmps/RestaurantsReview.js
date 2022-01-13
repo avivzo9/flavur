@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { fontSizes, spacing } from "../../../utils/sizes";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { colors } from "../../../utils/colors";
-
+import { Divider } from "react-native-paper";
 
 export default function RestaurantReview({ review, isDarkMode }) {
     const ratingArr = review.rating ? Array.from(new Array(Math.floor(review.rating))) : null
@@ -24,6 +24,7 @@ export default function RestaurantReview({ review, isDarkMode }) {
                 <Text style={[styles().reviewTxt, styles(isDarkMode).darkModeTxt, { opacity: isDarkMode ? 0.7 : 1 }]}>{review.text}</Text>
                 <Text style={[styles().reviewTxt, styles(isDarkMode).darkModeTxt, { opacity: isDarkMode ? 0.6 : 1 }]}>{review.relative_time_description.charAt(0).toUpperCase() + review.relative_time_description.slice(1)}</Text>
             </View>
+            <Divider />
         </View>
     )
 }

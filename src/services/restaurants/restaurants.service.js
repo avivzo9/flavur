@@ -25,7 +25,19 @@ export async function getRestaurants(location, isMock, radius) {
     }
 }
 
-export async function getRestaurantDetails(placeId) {
+// async function setPhotos(restaurants) {
+//     await restaurants.map(async (rest) => {
+//         if (!rest || !rest.photos) {
+//             rest.photos = [noImage]
+//             return
+//         }
+//         const details = await getRestaurantDetailsByPlaceId(rest.place_id)
+//         if (details && Object.keys(details)) rest = details
+//     })
+//     return restaurants;
+// }
+
+export async function getRestaurantDetailsByPlaceId(placeId) {
     try {
         const details = await fetch(`https://us-central1-mealstogo-dd9b1.cloudfunctions.net/getPlaceDetails?placeId=${placeId}`)
         return await details.json();

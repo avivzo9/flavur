@@ -11,6 +11,7 @@ import { fonts } from '../../../utils/fonts';
 export default function RestaurantsCard({ restaurant, navigation, route, isNavigate, isDetails }) {
     const { favorites, addFavorites, removeFavorites } = useContext(FavoritesContext)
     const { isDarkMode } = useContext(AppConfigContext)
+    
     const { name, icon, vicinity, user_ratings_total, opening_hours = false, rating, business_status, place_id } = restaurant
     const isTmpClosed = business_status === "OPERATIONAL" ? true : false
     const ratingArr = rating ? Array.from(new Array(Math.floor(rating))) : null
@@ -41,7 +42,7 @@ export default function RestaurantsCard({ restaurant, navigation, route, isNavig
                         {ratingArr.map((_, idx) => <Ionicons key={`star-${place_id}-${idx}`} name={"star"} size={20} color={'#FFBD00'} />)}
                         <Text style={[styles().rating, styles(isDarkMode).darkModeTxt]}> {rating} ({formatUserRating(user_ratings_total)})</Text>
                     </View>}
-                    <Text style={{ color: opening_hours.open_now ? 'green' : 'tomato' }}>{opening_hours.open_now && isTmpClosed ? 'Open now' : 'Closed'}</Text>
+                    {opening_hours && <Text style={{ color: opening_hours.open_now ? 'green' : 'tomato' }}>{opening_hours.open_now && isTmpClosed ? 'Open now' : 'Closed'}</Text>}
                 </View>
             </Card>
         </TouchableOpacity>
