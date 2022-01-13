@@ -1,8 +1,7 @@
-const functions = require('firebase-functions');
 const { locations } = require("./geocode.mock")
 const url = require('url')
 
-module.exports.geocodeRequest = (request, response, client) => {
+module.exports.geocodeRequest = (request, response, client, key) => {
     const { city, mock } = url.parse(request.url, true).query;
     if (!city || !city.length) return response.send('Error: No city has specified!')
     if (mock === 'true') {
@@ -12,7 +11,7 @@ module.exports.geocodeRequest = (request, response, client) => {
         client.geocode({
             params: {
                 address: city,
-                key: functions.config().google.key
+                key
             },
             timeout: 1000
         }).then((res) => response.json(res.data))
