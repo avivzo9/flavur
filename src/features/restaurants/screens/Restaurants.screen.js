@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { FlatList, SafeAreaView, StyleSheet, Text, View, VirtualizedList } from 'react-native';
 import { RestaurantsContext } from '../../../services/restaurants/restaurants.context';
 import { fontSizes, spacing } from '../../../utils/sizes';
 import RestaurantsCard from '../cmps/RestaurantsCard.cmp';
@@ -17,6 +17,24 @@ export default function RestaurantsScreen({ navigation }) {
 
     const isErrors = (!!restaurantError || !!locationError);
 
+
+    const getItem = (data, index) => ({
+        id: Math.random().toString(12).substring(0),
+        title: `Item ${index + 1}`,
+        restaurant: data[index]
+    });
+
+    const getItemCount = (data) => data.length;
+
+    const Item = ({ item }) => {
+        const { restaurant } = item
+        return (
+            <FadeInView duration={500}>
+                <RestaurantsCard navigation={navigation} restaurant={restaurant} key={restaurant.name} />
+            </FadeInView>
+        )
+    };
+
     if (restaurantLoading || isLocationLoading) return (<Loader />)
 
     return (
@@ -26,12 +44,20 @@ export default function RestaurantsScreen({ navigation }) {
                 <Text style={styles().errorMsg}>Something went wrong retrieving the data.</Text>
                 <Text style={styles().errorMsg}>Try again later.</Text>
             </View>}
-            {!isErrors && <FlatList data={restaurants}
+            <VirtualizedList
+                data={restaurants}
+                initialNumToRender={4}
+                renderItem={({ item }) => <Item item={item} key={item.title} />}
+                getItemCount={getItemCount}
+                getItem={getItem}
+                contentContainerStyle={{ padding: spacing.md }}
+            />
+            {/* {!isErrors && <FlatList data={restaurants}
                 renderItem={({ item, idx }) => <FadeInView duration={500}>
-                    <RestaurantsCard navigation={navigation} restaurant={item} key={`${item.place_id}-${idx}`} />
+                    <RestaurantsCard navigation={navigation} restaurant={item} key={`${item.name}-${idx}`} />
                 </FadeInView>}
-                contentContainerStyle={{ padding: spacing.md }} />}
-        </SafeAreaView >
+                contentContainerStyle={{ padding: spacing.md }} />} */}
+        </SafeAreaView>
     )
 };
 

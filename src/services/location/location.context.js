@@ -8,7 +8,7 @@ import { AppConfigContext } from '../appConfig/appConfig.context';
 export const LocationContext = createContext()
 
 export const LocationContextProvider = ({ children }) => {
-    const { isMock, isLocation } = useContext(AppConfigContext)
+    const { isMock, isLocation, isLocationOn } = useContext(AppConfigContext)
     const [location, setLocation] = useState(null)
     const [isLocationLoading, setIsLocationLoading] = useState(false)
     const [locationError, setLocationError] = useState(null)
@@ -16,7 +16,7 @@ export const LocationContextProvider = ({ children }) => {
     const [keyword, setKeyword] = useState(isMock ? 'Antwerp' : 'Tel Aviv')
 
     useEffect(() => {
-        if (location) initLocation()
+        initLocation()
     }, [])
 
     useEffect(() => {
@@ -26,6 +26,8 @@ export const LocationContextProvider = ({ children }) => {
     }, [keyword])
 
     const initLocation = async (isAlert) => {
+        if (!location) return
+        await isLocationOn()
         setIsLocationLoading(true)
         if (!isLocation) isAlert ? locationAlert() : null
         else await getCurrLocation()
@@ -43,6 +45,7 @@ export const LocationContextProvider = ({ children }) => {
     }
 
     const getCurrLocation = async () => {
+        if (isMock) return
         const location = await GetLocation.getCurrentPosition({ enableHighAccuracy: true, timeout: 15000 })
         if (!location) {
             setIsLocationLoading(false)

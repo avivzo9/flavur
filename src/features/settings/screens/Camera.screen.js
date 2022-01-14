@@ -33,7 +33,7 @@ export default function CameraScreen({ navigation }) {
     return (
         <>
             {photo && <View style={styles.container}>
-                <Image style={styles.img} source={{ uri: photo }} />
+                <Image style={[styles.img, { transform: [{ scaleX: -1 }] }]} source={{ uri: photo }} />
                 <View style={styles.optionsCon}>
                     <TouchableOpacity onPress={() => setPhoto(null)} style={styles.capture}>
                         <Text style={styles.textOption}> <Ionicons name="repeat-outline" size={24} color={'red'} /> </Text>
@@ -47,6 +47,7 @@ export default function CameraScreen({ navigation }) {
                 {isFlashOn && <View style={styles.flashScreen}></View>}
                 <RNCamera
                     ref={ref => camera = ref}
+                    captureAudio={false}
                     style={styles.preview}
                     type={isBackCam ? RNCamera.Constants.Type.back : RNCamera.Constants.Type.front}
                     flashMode={isFlash ? RNCamera.Constants.FlashMode.on : RNCamera.Constants.FlashMode.off}

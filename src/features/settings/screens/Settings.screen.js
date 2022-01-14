@@ -61,7 +61,7 @@ export default function SettingsScreen({ navigation }) {
         <SafeAreaView style={styles(isDarkMode).settingsContainer}>
             <View style={styles().avatarCon}>
                 <TouchableOpacity onPress={() => navigation.navigate("Camera")}>
-                    {profilePhoto && <Avatar.Image size={120} style={styles(isDarkMode).avatarImg} color={isDarkMode ? 'white' : 'black'} source={{ uri: profilePhoto }} />}
+                    {profilePhoto && <Avatar.Image size={120} style={[styles(isDarkMode).avatarImg, { transform: [{ scaleX: -1 }] }]} color={isDarkMode ? 'white' : 'black'} source={{ uri: profilePhoto }} />}
                     {!profilePhoto && <Avatar.Icon size={120} style={styles(isDarkMode).avatarImg} color={isDarkMode ? 'white' : 'black'} icon="account-circle" />}
                 </TouchableOpacity>
                 <Text style={[styles().avatarEmail, styles(isDarkMode).darkModeTxt]}>{user.email}</Text>

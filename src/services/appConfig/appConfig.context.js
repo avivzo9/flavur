@@ -6,7 +6,7 @@ export const AppConfigContext = createContext()
 
 export const AppConfigContextProvider = ({ children }) => {
     const [searchRadius, setSearchRadius] = useState(0.5)
-    const [isMock, setIsMock] = useState(true)
+    const [isMock, setIsMock] = useState(false)
     const [isLocation, setIsLocation] = useState(false)
     const [isDarkMode, setIsDarkMode] = useState(Appearance.getColorScheme() === 'dark' ? true : false)
 
@@ -23,7 +23,8 @@ export const AppConfigContextProvider = ({ children }) => {
     }
 
     return (
-        <AppConfigContext.Provider value={{ searchRadius, isMock, setIsMock, setIsDarkMode, isDarkMode, isAndroid, isLocation, setSearchRadius }}>
+        <AppConfigContext.Provider
+            value={{ isLocationOn, searchRadius, isMock, setIsMock, setIsDarkMode, isDarkMode, isAndroid, isLocation, setSearchRadius }}>
             {children}
         </AppConfigContext.Provider>
     )
