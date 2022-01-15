@@ -7,7 +7,7 @@ import { colors } from "../../../utils/colors";
 import { fonts } from "../../../utils/fonts";
 import { fontSizes, spacing } from "../../../utils/sizes";
 import FadeInView from "../../animations/fade.animation";
-import FavoritesCard from "../cmps/FavouritesCard.cmp";
+import SmallRestCard from "../cmps/SmallRestCard";
 
 export default function FavoritesScreen({ navigation }) {
     const { favorites } = useContext(FavoritesContext)
@@ -22,7 +22,7 @@ export default function FavoritesScreen({ navigation }) {
         <SafeAreaView style={styles(isDarkMode).container}>
             <Text style={[styles().title, styles(isDarkMode).darkModeTxt]}>Your Favorites</Text>
             <FlatList data={favorites}
-                renderItem={({ item, idx }) => <FadeInView><FavoritesCard isDarkMode={isDarkMode} navigation={navigation} favourite={item} key={`${item.index}-${idx}`} /></FadeInView>}
+                renderItem={({ item, idx }) => <FadeInView key={`${item.place_id}-${idx}`}><SmallRestCard isDarkMode={isDarkMode} navigation={navigation} restaurant={item} /></FadeInView>}
                 contentContainerStyle={{ padding: spacing.md }} />
         </SafeAreaView>
     )
@@ -36,7 +36,7 @@ const styles = (isDark) => StyleSheet.create({
         backgroundColor: isDark ? colors.darkMode.dark : colors.darkMode.light
     },
     noFavoritesTitle: {
-        fontSize: fontSizes.lg -4,
+        fontSize: fontSizes.lg - 4,
         fontFamily: fonts.header
     },
     title: {

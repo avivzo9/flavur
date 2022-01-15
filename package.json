@@ -26,6 +26,7 @@
     "react-native-camera": "^4.2.1",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-get-location": "^2.2.1",
+    "react-native-image-placeholder": "^1.0.14",
     "react-native-maps": "^0.29.3",
     "react-native-paper": "^4.9.2",
     "react-native-safe-area-context": "^3.3.2",

@@ -14,7 +14,7 @@ export default function AppNavigator() {
 
     useEffect(() => {
         const subscription = AppState.addEventListener("change", nextAppState => {
-            if (appState.current.match(/inactive|background/) && nextAppState === "active") {
+            if (nextAppState === "active") {
                 console.log("App Active!");
                 initLocation()
             }

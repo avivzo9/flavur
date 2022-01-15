@@ -20,7 +20,7 @@ export default function Search({ routeName }) {
         setSearchKeyword(keyword)
     }, [keyword])
 
-    const search = async (txt) => await onSearch(txt)
+    const search = (txt) => onSearch(txt)
 
     const onChangeRadius = () => {
         setSearchRadius(radiusVal)

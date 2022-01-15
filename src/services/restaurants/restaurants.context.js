@@ -12,7 +12,7 @@ export const RestaurantsContextProvider = ({ children }) => {
     const { isMock } = useContext(AppConfigContext)
     const { location } = useContext(LocationContext)
     const { isLocation, searchRadius } = useContext(AppConfigContext)
-    
+
     useEffect(() => {
         if (location) {
             initContext()
@@ -29,7 +29,8 @@ export const RestaurantsContextProvider = ({ children }) => {
     const retrieveRestaurants = async (loc) => {
         setRestaurantLoading(true)
         getRestaurants(loc, isMock, searchRadius).then((res) => {
-            setRestaurants(res)
+            if (!res) throw new Error()
+            else setRestaurants(res)
             setRestaurantLoading(false)
         }).catch((err) => {
             setRestaurantError(err)

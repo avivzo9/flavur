@@ -8,6 +8,7 @@ import { colors } from '../../../utils/colors';
 import { spacing } from '../../../utils/sizes';
 import { fonts } from '../../../utils/fonts';
 import { ScrollView } from 'react-native-gesture-handler';
+import ImageLoad from 'react-native-image-placeholder';
 
 export default function RestaurantsCard({ restaurant, navigation, route, isDetails }) {
     const { favorites, addFavorites, removeFavorites } = useContext(FavoritesContext)
@@ -21,21 +22,24 @@ export default function RestaurantsCard({ restaurant, navigation, route, isDetai
     const formatUserRating = (rate) => rate.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 
     return (
-        <View style={styles(isDarkMode, route).container}>
-            <Card elevation={5}>
-                <View style={{ height: isDetails ? 190 : 130 }}>
+        <View style={styles(isDarkMode, false, route).container}>
+            <Card elevation={5} borderRadius={15} style={{ borderRadius: 15 }}>
+                <View style={styles(isDarkMode, isDetails).cover}>
                     <TouchableOpacity activeOpacity={0.5} onPress={() => isFavourite ? removeFavorites(restaurant) : addFavorites(restaurant)} style={styles(isDarkMode).favBtn}>
                         <Ionicons name={isFavourite ? "heart" : "heart-outline"} size={28} color={isFavourite ? 'red' : 'white'} />
                     </TouchableOpacity>
-                    {(restaurant.photos && !!restaurant.photos.length) &&
-                        <ScrollView style={{ height: '100%', backgroundColor: isDarkMode ? colors.darkMode.topDark : colors.darkMode.light }} horizontal={true} style={styles(isDetails).coverImgCon}>
-                            {restaurant.photos.map((photo, idx) => <Image
+                    {restaurant.photos.length > 1 ?
+                        <ScrollView width='96%' horizontal={true} style={styles(isDarkMode).coverImgCon}>
+                            {restaurant.photos.map((photo, idx) => <ImageLoad
+                                borderRadius={10}
+                                isShowActivity={false}
                                 key={`${photo}-${idx}`} source={{ uri: photo }}
                                 style={[styles().coverImg, { width: isDetails ? 200 : 140 }]}
                             />)}
-                        </ScrollView>}
+                        </ScrollView> :
+                        <ImageLoad loadingStyle={{ size: 'large', color: 'tomato' }} source={{ uri: restaurant.photos[0] }} style={[styles().coverImg, { width: '100%', height: '100%' }]} />}
                 </View>
-                <TouchableOpacity onPress={() => isDetails ? null : navigation.navigate('RestaurantDetails', { restaurant })} activeOpacity={isDetails ? 1 : 0.9} style={styles(isDarkMode, route).container}>
+                <TouchableOpacity onPress={() => isDetails ? null : navigation.navigate('RestaurantDetails', { restaurant })} activeOpacity={isDetails ? 1 : 0.9}>
                     <View style={styles(isDarkMode).cardMainCon}>
                         <View style={styles().cardMain}>
                             <Text style={[styles().title, styles(isDarkMode).darkModeTxt]}>{name}</Text>
@@ -45,7 +49,7 @@ export default function RestaurantsCard({ restaurant, navigation, route, isDetai
                         </View>
                         <Image style={{ width: 22, height: 22 }} source={{ uri: icon }} />
                     </View>
-                    <View style={styles(isDarkMode).contentCon}>
+                    <View style={styles(isDarkMode, isDetails).contentCon}>
                         {(rating && user_ratings_total) && <View style={styles().ratingCon}>
                             {ratingArr.map((_, idx) => <Ionicons key={`star-${place_id}-${idx}`} name={"star"} size={20} color={'#FFBD00'} />)}
                             <Text style={[styles().rating, styles(isDarkMode).darkModeTxt]}> {rating} ({formatUserRating(user_ratings_total)})</Text>
@@ -58,10 +62,9 @@ export default function RestaurantsCard({ restaurant, navigation, route, isDetai
     )
 };
 
-const styles = (isDark, routeName) => StyleSheet.create({
+const styles = (isDark, isDetails, routeName) => StyleSheet.create({
     container: {
         marginBottom: (routeName === 'RestaurantDetails') ? 0 : spacing.md,
-        borderRadius: 10,
     },
     title: {
         fontFamily: fonts.header,
@@ -69,10 +72,22 @@ const styles = (isDark, routeName) => StyleSheet.create({
         padding: spacing.md,
         paddingBottom: 0
     },
+    cover: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: isDetails ? 190 : 130,
+        backgroundColor: isDark ? colors.darkMode.topDark : colors.darkMode.light,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10
+    },
     coverImgCon: {
         zIndex: 5,
         height: '100%',
-        padding: spacing.sm,
+        marginRight: 4,
+        paddingTop: spacing.sm,
+        paddingBottom: spacing.sm,
+        borderTopLeftRadius: 10,
+        backgroundColor: isDark ? colors.darkMode.topDark : colors.darkMode.light,
     },
     coverImg: {
         marginLeft: 4,
@@ -92,6 +107,8 @@ const styles = (isDark, routeName) => StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: isDark ? colors.darkMode.topDark : colors.darkMode.light,
+        borderBottomLeftRadius: isDetails ? 0 : 10,
+        borderBottomRightRadius: isDetails ? 0 : 10
     },
     cardMainCon: {
         flexDirection: 'row',

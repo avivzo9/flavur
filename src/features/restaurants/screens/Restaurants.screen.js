@@ -17,24 +17,6 @@ export default function RestaurantsScreen({ navigation }) {
 
     const isErrors = (!!restaurantError || !!locationError);
 
-
-    const getItem = (data, index) => ({
-        id: Math.random().toString(12).substring(0),
-        title: `Item ${index + 1}`,
-        restaurant: data[index]
-    });
-
-    const getItemCount = (data) => data.length;
-
-    const Item = ({ item }) => {
-        const { restaurant } = item
-        return (
-            <FadeInView duration={500}>
-                <RestaurantsCard navigation={navigation} restaurant={restaurant} key={restaurant.name} />
-            </FadeInView>
-        )
-    };
-
     if (restaurantLoading || isLocationLoading) return (<Loader />)
 
     return (
@@ -42,21 +24,13 @@ export default function RestaurantsScreen({ navigation }) {
             <Search />
             {isErrors && <View style={styles().errCon}>
                 <Text style={styles().errorMsg}>Something went wrong retrieving the data.</Text>
-                <Text style={styles().errorMsg}>Try again later.</Text>
+                <Text style={styles().errorMsg}>Try different search or try again later.</Text>
             </View>}
-            <VirtualizedList
-                data={restaurants}
-                initialNumToRender={4}
-                renderItem={({ item }) => <Item item={item} key={item.title} />}
-                getItemCount={getItemCount}
-                getItem={getItem}
-                contentContainerStyle={{ padding: spacing.md }}
-            />
-            {/* {!isErrors && <FlatList data={restaurants}
+            {!isErrors && <FlatList data={restaurants}
                 renderItem={({ item, idx }) => <FadeInView duration={500}>
                     <RestaurantsCard navigation={navigation} restaurant={item} key={`${item.name}-${idx}`} />
                 </FadeInView>}
-                contentContainerStyle={{ padding: spacing.md }} />} */}
+                contentContainerStyle={{ padding: spacing.md }} />}
         </SafeAreaView>
     )
 };

@@ -14,20 +14,20 @@ export default function RestaurantDetailsNav({ restaurant, isDarkMode, navigatio
             <TouchableOpacity onPress={() => navigation.goBack()} style={styles(isDarkMode).iconBtn} activeOpacity={0.8}>
                 <Ionicons name='arrow-back' size={28} color={isDarkMode ? colors.darkMode.light : colors.darkMode.dark} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => Linking.openURL(restaurant.url)} style={styles(isDarkMode).mapsBtn} activeOpacity={0.8}>
+            {restaurant.url && <TouchableOpacity onPress={() => Linking.openURL(restaurant.url)} style={styles(isDarkMode).mapsBtn} activeOpacity={0.8}>
                 <Image style={styles(isDarkMode).navImg} source={mapsIcon} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => Linking.openURL(`https://www.waze.com/ul?ll=${restaurant.geometry.location.lat}%2C${restaurant.geometry.location.lng}&navigate=yes&zoom=17`)} style={styles(isDarkMode).wazeBtn} activeOpacity={0.8}>
+            </TouchableOpacity>}
+            {restaurant.geometry && <TouchableOpacity onPress={() => Linking.openURL(`https://www.waze.com/ul?ll=${restaurant.geometry.location.lat}%2C${restaurant.geometry.location.lng}&navigate=yes&zoom=17`)} style={styles(isDarkMode).wazeBtn} activeOpacity={0.8}>
                 <View style={styles(isDarkMode).wazeInnerView}>
                     <Image style={styles().navImg} source={wazeIcon} />
                 </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => Linking.openURL(restaurant.website)} style={styles(isDarkMode).iconBtn} activeOpacity={0.8}>
+            </TouchableOpacity>}
+            {restaurant.website && <TouchableOpacity onPress={() => Linking.openURL(restaurant.website)} style={styles(isDarkMode).iconBtn} activeOpacity={0.8}>
                 <Ionicons name='link' size={28} color={isDarkMode ? colors.darkMode.light : colors.darkMode.dark} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => Linking.openURL(`tel:${restaurant.formatted_phone_number}`)} style={styles(isDarkMode).iconBtn} activeOpacity={0.8}>
+            </TouchableOpacity>}
+            {restaurant.formatted_phone_number && <TouchableOpacity onPress={() => Linking.openURL(`tel:${restaurant.formatted_phone_number}`)} style={styles(isDarkMode).iconBtn} activeOpacity={0.8}>
                 <Ionicons name='call' size={28} color={isDarkMode ? colors.darkMode.light : colors.darkMode.dark} />
-            </TouchableOpacity>
+            </TouchableOpacity>}
         </View>
     )
 }

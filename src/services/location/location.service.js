@@ -9,6 +9,6 @@ export async function getLocation(search, isMock) {
         if (results && !isMock) await saveToStorage(KEY + search, results)
         return results;
     } catch (err) {
-        console.log('err:', err)
+        console.error('err in getLocation:', err)
     }
 }
