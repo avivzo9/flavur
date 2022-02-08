@@ -4,19 +4,20 @@ import { createStackNavigator, TransitionPresets } from '@react-navigation/stack
 import RestaurantsDetails from '../features/restaurants/screens/RestaurantsDetails';
 import { LocationContext } from '../services/location/location.context';
 import { AppState } from 'react-native';
+import { AppConfigContext } from '../services/appConfig/appConfig.context';
 
 const AppStack = createStackNavigator()
 
 export default function AppNavigator() {
     const { initLocation } = useContext(LocationContext)
+    const { isLocationOn } = useContext(AppConfigContext)
 
     const appState = useRef(AppState.currentState);
 
     useEffect(() => {
-        const subscription = AppState.addEventListener("change", nextAppState => {
+        const subscription = AppState.addEventListener("change", async nextAppState => {
             if (nextAppState === "active") {
-                console.log("App Active!");
-                initLocation()
+                await isLocationOn()
             }
             appState.current = nextAppState;
         });

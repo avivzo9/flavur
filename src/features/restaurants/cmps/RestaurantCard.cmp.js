@@ -10,11 +10,11 @@ import { fonts } from '../../../utils/fonts';
 import { ScrollView } from 'react-native-gesture-handler';
 import ImageLoad from 'react-native-image-placeholder';
 
-export default function RestaurantsCard({ restaurant, navigation, route, isDetails }) {
+export default function RestaurantCard({ restaurant, navigation, route, isDetails, scrollRef }) {
     const { favorites, addFavorites, removeFavorites } = useContext(FavoritesContext)
     const { isDarkMode } = useContext(AppConfigContext)
 
-    const { name, icon, vicinity, user_ratings_total, opening_hours = false, rating, business_status, place_id } = restaurant
+    const { name, icon, vicinity, user_ratings_total, opening_hours, rating, business_status, place_id } = restaurant
     const isTmpClosed = business_status === "OPERATIONAL" ? true : false
     const ratingArr = rating ? Array.from(new Array(Math.floor(rating))) : null
     const isFavourite = favorites.find((r) => r.place_id === restaurant.place_id)
@@ -29,13 +29,14 @@ export default function RestaurantsCard({ restaurant, navigation, route, isDetai
                         <Ionicons name={isFavourite ? "heart" : "heart-outline"} size={28} color={isFavourite ? 'red' : 'white'} />
                     </TouchableOpacity>
                     {restaurant.photos.length > 1 ?
-                        <ScrollView width='96%' horizontal={true} style={styles(isDarkMode).coverImgCon}>
-                            {restaurant.photos.map((photo, idx) => <ImageLoad
-                                borderRadius={10}
-                                isShowActivity={false}
-                                key={`${photo}-${idx}`} source={{ uri: photo }}
-                                style={[styles().coverImg, { width: isDetails ? 200 : 140 }]}
-                            />)}
+                        <ScrollView ref={scrollRef ? scrollRef : null} width='96%' horizontal={true} style={styles(isDarkMode).coverImgCon}>
+                            {restaurant.photos.map((photo, idx) =>
+                                <ImageLoad
+                                    borderRadius={10}
+                                    isShowActivity={false}
+                                    key={`${photo}-${idx}`} source={{ uri: photo }}
+                                    style={[styles().coverImg, { width: isDetails ? 200 : 140 }]}
+                                />)}
                         </ScrollView> :
                         <ImageLoad loadingStyle={{ size: 'large', color: 'tomato' }} source={{ uri: restaurant.photos[0] }} style={[styles().coverImg, { width: '100%', height: '100%' }]} />}
                 </View>

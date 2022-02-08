@@ -1,14 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Slider } from '@miblanchard/react-native-slider';
-import { StyleSheet, View } from 'react-native';
-import { Searchbar } from 'react-native-paper';
+import { Button, StyleSheet, View } from 'react-native';
+import { Chip, IconButton, Searchbar } from 'react-native-paper';
 import { AppConfigContext } from '../../../services/appConfig/appConfig.context';
 import { LocationContext } from '../../../services/location/location.context';
 import { RestaurantsContext } from '../../../services/restaurants/restaurants.context';
 import { spacing } from '../../../utils/sizes';
 import { colors } from '../../../utils/colors';
+import SortOptions from './SortOptions.cmp';
 
-export default function Search({ routeName }) {
+export default function Search({ routeName, sortBy, setSortBy, isDescending, setIsDescending, setIsListLoading }) {
     const { setSearchRadius, isLocation, searchRadius, isDarkMode } = useContext(AppConfigContext)
     const { keyword, onSearch, initLocation } = useContext(LocationContext)
     const { initContext } = useContext(RestaurantsContext)
@@ -53,6 +54,13 @@ export default function Search({ routeName }) {
                     width={'109%'}
                     trackClickable={false}
                 />
+                {routeName != 'map' && <SortOptions
+                    sortBy={sortBy}
+                    setSortBy={setSortBy}
+                    isDescending={isDescending}
+                    setIsDescending={setIsDescending}
+                    setIsListLoading={setIsListLoading}
+                />}
             </View>
         </View>
     )
@@ -71,7 +79,7 @@ const styles = (isDark) => StyleSheet.create({
     },
     radiusCon: {
         width: '100%',
-        flexDirection: 'row',
+        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         padding: spacing.md,
