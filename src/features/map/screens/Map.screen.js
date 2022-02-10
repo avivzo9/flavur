@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react"
-import { StyleSheet, View } from "react-native";
-import MapView, { Marker } from 'react-native-maps';
+import { StyleSheet, View, Text } from "react-native";
+import MapView, { Marker, Callout } from 'react-native-maps';
 import { LocationContext } from "../../../services/location/location.context";
 import { RestaurantsContext } from "../../../services/restaurants/restaurants.context";
 import { AppConfigContext } from "../../../services/appConfig/appConfig.context";
@@ -46,7 +46,7 @@ export default function MapScreen({ route, navigation }) {
     const setRegion = (rest) => {
         const northeastLat = rest.geometry.viewport.northeast.lat
         const southwestLat = rest.geometry.viewport.southwest.lat
-        setRegionData({ latitude: rest.geometry.location.lat, longitude: rest.geometry.location.lng, latitudeDelta: (northeastLat - southwestLat), longitudeDelta: 0.03 })
+        setRegionData({ latitude: rest.geometry.location.lat, longitude: rest.geometry.location.lng, latitudeDelta: (northeastLat - southwestLat), longitudeDelta: 0.02 })
     }
 
     if (!latDelta || restaurantLoading) return (<Loader />)
@@ -74,15 +74,13 @@ export default function MapScreen({ route, navigation }) {
                         scrollRef.current?.scrollTo({ y: 0, animated: true });
                     }}
                 >
-                    <Ionicons name='location-sharp' size={45} color="black" />
+                    <Ionicons name='location-sharp' size={45} color={currRest.place_id === rest.place_id ? "tomato" : "black"} />
                 </Marker>)}
             </MapView>
-            {
-                currRest &&
+            {currRest &&
                 <View style={styles.hoverCardCon}>
                     <RestaurantCard scrollRef={scrollRef} restaurant={currRest} navigation={navigation} route={route} />
-                </View>
-            }
+                </View>}
         </>
     )
 }

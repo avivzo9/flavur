@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Slider } from '@miblanchard/react-native-slider';
-import { Button, StyleSheet, View } from 'react-native';
-import { Chip, IconButton, Searchbar } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { Searchbar } from 'react-native-paper';
 import { AppConfigContext } from '../../../services/appConfig/appConfig.context';
 import { LocationContext } from '../../../services/location/location.context';
 import { RestaurantsContext } from '../../../services/restaurants/restaurants.context';
@@ -9,7 +9,7 @@ import { spacing } from '../../../utils/sizes';
 import { colors } from '../../../utils/colors';
 import SortOptions from './SortOptions.cmp';
 
-export default function Search({ routeName, sortBy, setSortBy, isDescending, setIsDescending, setIsListLoading }) {
+export default function Search({ routeName, sortBy, setSortBy, isDescending, setIsDescending, setIsListLoading, setIsOpenNow, isOpenNow }) {
     const { setSearchRadius, isLocation, searchRadius, isDarkMode } = useContext(AppConfigContext)
     const { keyword, onSearch, initLocation } = useContext(LocationContext)
     const { initContext } = useContext(RestaurantsContext)
@@ -39,7 +39,7 @@ export default function Search({ routeName, sortBy, setSortBy, isDescending, set
                 onSubmitEditing={() => search(searchKeyword)}
                 onChangeText={(txt) => setSearchKeyword(txt)}
             />
-            <View style={styles().radiusCon}>
+            <View style={styles().filters}>
                 <Slider
                     value={searchRadius}
                     onValueChange={value => setRadiusVal(value)}
@@ -51,7 +51,8 @@ export default function Search({ routeName, sortBy, setSortBy, isDescending, set
                     minimumValue={0.1}
                     maximumValue={0.9}
                     step={0.4}
-                    width={'109%'}
+                    width={'100%'}
+                    trackStyle={{ padding: 3 }}
                     trackClickable={false}
                 />
                 {routeName != 'map' && <SortOptions
@@ -60,6 +61,8 @@ export default function Search({ routeName, sortBy, setSortBy, isDescending, set
                     isDescending={isDescending}
                     setIsDescending={setIsDescending}
                     setIsListLoading={setIsListLoading}
+                    setIsOpenNow={setIsOpenNow}
+                    isOpenNow={isOpenNow}
                 />}
             </View>
         </View>
@@ -69,21 +72,19 @@ export default function Search({ routeName, sortBy, setSortBy, isDescending, set
 const styles = (isDark) => StyleSheet.create({
     searchCon: {
         padding: spacing.md,
-        paddingBottom: 0
+        paddingBottom: 0,
     },
     searchMapCon: {
         padding: spacing.md,
         position: 'absolute',
         zIndex: 999,
-        width: '100%'
-    },
-    radiusCon: {
         width: '100%',
+    },
+    filters: {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: spacing.md,
-        paddingBottom: 0
+        paddingBottom: 0,
     },
     input: {
         backgroundColor: isDark ? colors.darkMode.topDark : colors.darkMode.light,

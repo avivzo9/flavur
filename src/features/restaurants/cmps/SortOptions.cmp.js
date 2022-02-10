@@ -1,13 +1,17 @@
-import React from "react";
-import { View } from "react-native";
+import React, { useContext } from "react";
+import { StyleSheet, View } from "react-native";
 import { Chip, IconButton } from "react-native-paper";
+import { AppConfigContext } from "../../../services/appConfig/appConfig.context";
 import { spacing } from "../../../utils/sizes";
 
-export default function SortOptions({ sortBy, setSortBy, isDescending, setIsDescending, setIsListLoading }) {
+export default function SortOptions({ sortBy, setSortBy, isDescending, setIsDescending, setIsListLoading, setIsOpenNow, isOpenNow }) {
+    const { isDarkMode } = useContext(AppConfigContext)
 
-    const sendSort = (sort) => {
+    const sendFilter = (filter, isOpen) => {
         setIsListLoading(true)
-        setSortBy(sort)
+        if (sortBy === filter) setSortBy(null)
+        else if (isOpen) setIsOpenNow(filter)
+        else setSortBy(filter)
     }
 
     const sendDescending = () => {
@@ -16,19 +20,38 @@ export default function SortOptions({ sortBy, setSortBy, isDescending, setIsDesc
     }
 
     return (
-        <View style={{ flexDirection: 'row' }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', width: '90%' }}>
-                <Chip mode={sortBy === 'priceLevel' ? 'flat' : 'outlined'} style={{ marginRight: spacing.sm, height: 34 }} icon="currency-usd" onPress={() => sortBy === 'priceLevel' ? sendSort(null) : sendSort('priceLevel')}>Price Level</Chip>
-                <Chip mode={sortBy === 'rating' ? 'flat' : 'outlined'} style={{ marginRight: spacing.sm, height: 34 }} icon="star" onPress={() => sortBy === 'rating' ? sendSort(null) : sendSort('rating')}>Rating</Chip>
-                <Chip mode={sortBy === 'open-now' ? 'flat' : 'outlined'} style={{ marginRight: spacing.sm, height: 34 }} icon="timetable" onPress={() => sortBy === 'open-now' ? sendSort(null) : sendSort('open-now')}>Open now</Chip>
+        <View style={styles().container}>
+            <View style={styles().filters}>
+                <Chip mode={sortBy === 'priceLevel' ? 'flat' : 'outlined'} style={styles(isDarkMode).chip} icon="currency-usd" onPress={() => sendFilter('priceLevel')}>Price</Chip>
+                <Chip mode={sortBy === 'rating' ? 'flat' : 'outlined'} style={styles(isDarkMode).chip} icon="star" onPress={() => sendFilter('rating')}>Rating</Chip>
+                <Chip mode={isOpenNow ? 'flat' : 'outlined'} style={styles(isDarkMode).chip} icon="timetable" onPress={() => sendFilter(!isOpenNow, true)}>Open now</Chip>
             </View>
             <IconButton
-                style={{ width: '10%' }}
                 icon={isDescending ? "arrow-down-bold-circle" : "arrow-up-bold-circle"}
-                color={'white'}
-                size={32}
+                color={isDarkMode ? 'white' : 'black'}
+                size={34}
                 onPress={() => sendDescending()}
+                style={{ margin: 0 }}
             />
         </View>
     )
 }
+
+const styles = (isDark) => StyleSheet.create({
+    container: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
+        height: 50,
+    },
+    filters: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+    },
+    chip: {
+        marginRight: spacing.sm,
+        height: 34,
+    }
+})

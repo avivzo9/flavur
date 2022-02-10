@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
 import { Button, StyleSheet, Text, View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { Divider, List } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { fontSizes, spacing } from "../../../utils/sizes";
@@ -71,13 +71,14 @@ export default function RestaurantsDetails({ navigation, route }) {
                             left={props => <List.Icon {...props} color={isDarkMode ? colors.darkMode.light : colors.darkMode.dark} icon="food" />}>
                             {weekday.map((day, idx) => <List.Item titleStyle={styles(isDarkMode).darkModeTxt} style={{ backgroundColor: isDarkMode ? colors.darkMode.topDark : 'rgba(128, 128, 128, 0.01)' }} title={day} key={day + (idx * 2)} />)}
                         </List.Accordion>}
-                        <List.Item
-                            title={'Show on map'}
-                            style={styles(isDarkMode).accordion}
-                            titleStyle={styles(isDarkMode).darkModeTxt}
-                            onPress={() => navigation.navigate('map', { restaurant: restaurant })}
-                            left={props => <List.Icon {...props} color={isDarkMode ? colors.darkMode.light : colors.darkMode.dark} icon="map" />}
-                        />
+                        <TouchableOpacity onPress={() => navigation.navigate('map', { restaurant: restaurant })} activeOpacity={0.8}>
+                            <List.Item
+                                title={'Show on map'}
+                                style={styles(isDarkMode).accordion}
+                                titleStyle={styles(isDarkMode).darkModeTxt}
+                                left={props => <List.Icon {...props} color={isDarkMode ? colors.darkMode.light : colors.darkMode.dark} icon="map" />}
+                            />
+                        </TouchableOpacity>
                     </List.Section>
                 </>}
                 {(restaurant.reviews && !!restaurant.reviews.length) && <View>
@@ -134,5 +135,6 @@ const styles = (isDark) => StyleSheet.create({
     },
     accordion: {
         backgroundColor: isDark ? colors.darkMode.topDark : 'rgba(255, 255, 255, 0.1)',
+        marginBottom: 10
     },
 })

@@ -62,11 +62,11 @@ export default function CameraScreen({ navigation }) {
                     <TouchableOpacity onPress={() => setIsFlash(!isFlash)} style={styles.capture}>
                         <Ionicons name={isFlash ? "flash" : "flash-outline"} size={24} color={'red'} />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => takePicture()} style={styles.capture}>
-                        <Ionicons name="camera-outline" size={24} color={'red'} />
-                    </TouchableOpacity>
                     <TouchableOpacity onPress={() => setIsBackCam(!isBackCam)} style={styles.capture}>
                         <Ionicons name="camera-reverse-outline" size={24} color={'red'} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => takePicture()} style={styles.capture}>
+                        <Ionicons name="camera-outline" size={24} color={'red'} />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={styles.capture}>
                         <Ionicons name="exit-outline" size={24} color={'red'} />

@@ -29,7 +29,7 @@ export default function RestaurantCard({ restaurant, navigation, route, isDetail
                         <Ionicons name={isFavourite ? "heart" : "heart-outline"} size={28} color={isFavourite ? 'red' : 'white'} />
                     </TouchableOpacity>
                     {restaurant.photos.length > 1 ?
-                        <ScrollView ref={scrollRef ? scrollRef : null} width='96%' horizontal={true} style={styles(isDarkMode).coverImgCon}>
+                        <ScrollView showsHorizontalScrollIndicator={false} ref={scrollRef ? scrollRef : null} width='96%' horizontal={true} style={styles(isDarkMode).coverImgCon}>
                             {restaurant.photos.map((photo, idx) =>
                                 <ImageLoad
                                     borderRadius={10}
@@ -41,21 +41,19 @@ export default function RestaurantCard({ restaurant, navigation, route, isDetail
                         <ImageLoad loadingStyle={{ size: 'large', color: 'tomato' }} source={{ uri: restaurant.photos[0] }} style={[styles().coverImg, { width: '100%', height: '100%' }]} />}
                 </View>
                 <TouchableOpacity onPress={() => isDetails ? null : navigation.navigate('RestaurantDetails', { restaurant })} activeOpacity={isDetails ? 1 : 0.9}>
-                    <View style={styles(isDarkMode).cardMainCon}>
-                        <View style={styles().cardMain}>
-                            <Text style={[styles().title, styles(isDarkMode).darkModeTxt]}>{name}</Text>
-                            <Card.Content>
-                                <Paragraph style={[styles().address, styles(isDarkMode).darkModeTxt]}>{vicinity}</Paragraph>
-                            </Card.Content>
-                        </View>
-                        <Image style={{ width: 22, height: 22 }} source={{ uri: icon }} />
+                    {/* <View style={styles(isDarkMode).cardMainCon}> */}
+                    <View style={styles(isDarkMode).cardMain}>
+                        <Text style={[styles().title, styles(isDarkMode).darkModeTxt]}>{name}</Text>
+                        <Text style={[styles().address, styles(isDarkMode).darkModeTxt]}>{vicinity}</Text>
                     </View>
+                    {/* <Image style={{ width: 22, height: 22 }} source={{ uri: icon }} /> */}
+                    {/* </View> */}
                     <View style={styles(isDarkMode, isDetails).contentCon}>
                         {(rating && user_ratings_total) && <View style={styles().ratingCon}>
                             {ratingArr.map((_, idx) => <Ionicons key={`star-${place_id}-${idx}`} name={"star"} size={20} color={'#FFBD00'} />)}
                             <Text style={[styles().rating, styles(isDarkMode).darkModeTxt]}> {rating} ({formatUserRating(user_ratings_total)})</Text>
                         </View>}
-                        {opening_hours && <Text style={{ color: opening_hours.open_now ? 'green' : 'tomato' }}>{opening_hours.open_now && isTmpClosed ? 'Open now' : 'Closed'}</Text>}
+                        {opening_hours && <Text style={{ color: opening_hours.open_now ? 'white' : 'tomato' }}>{opening_hours.open_now && isTmpClosed ? 'Open now' : 'Closed'}</Text>}
                     </View>
                 </TouchableOpacity>
             </Card>
@@ -70,8 +68,6 @@ const styles = (isDark, isDetails, routeName) => StyleSheet.create({
     title: {
         fontFamily: fonts.header,
         fontSize: 20,
-        padding: spacing.md,
-        paddingBottom: 0
     },
     cover: {
         justifyContent: 'center',
@@ -111,16 +107,21 @@ const styles = (isDark, isDetails, routeName) => StyleSheet.create({
         borderBottomLeftRadius: isDetails ? 0 : 10,
         borderBottomRightRadius: isDetails ? 0 : 10
     },
-    cardMainCon: {
-        flexDirection: 'row',
-        alignItems: 'center',
+    // cardMainCon: {
+    //     flexDirection: 'row',
+    //     alignItems: 'center',
+    //     backgroundColor: isDark ? colors.darkMode.topDark : colors.darkMode.light,
+    // },
+    cardMain: {
+        width: '100%',
+        justifyContent: 'center',
+        paddingRight: spacing.md,
+        paddingLeft: spacing.md,
+        paddingBottom: spacing.sm,
         backgroundColor: isDark ? colors.darkMode.topDark : colors.darkMode.light,
     },
-    cardMain: {
-        width: '90%',
-    },
     address: {
-        fontFamily: fonts.body
+        fontFamily: fonts.body,
     },
     favBtn: {
         position: 'absolute',

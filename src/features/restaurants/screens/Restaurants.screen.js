@@ -20,9 +20,10 @@ export default function RestaurantsScreen({ navigation }) {
     const isErrors = (!!restaurantError || !!locationError);
 
     const [restsData, setRestsData] = useState(null)
+    const [isListLoading, setIsListLoading] = useState(false)
     const [isDescending, setIsDescending] = useState(true)
     const [sortBy, setSortBy] = useState(null)
-    const [isListLoading, setIsListLoading] = useState(false)
+    const [isOpenNow, setIsOpenNow] = useState(false)
 
     useEffect(() => {
         const data = JSON.parse(JSON.stringify(restaurants))
@@ -34,9 +35,10 @@ export default function RestaurantsScreen({ navigation }) {
         else {
             const data = JSON.parse(JSON.stringify(restaurants))
             setRestsData(data)
+            setRestsData(prevData => prevData = isOpenNow ? data.filter((r) => (r.opening_hours && r.opening_hours.open_now)) : [...data])
             setIsListLoading(false)
         }
-    }, [sortBy, isDescending])
+    }, [sortBy, isDescending, isOpenNow])
 
     const sortRestaurants = () => {
         switch (sortBy) {
@@ -60,16 +62,8 @@ export default function RestaurantsScreen({ navigation }) {
                     }
                 })
                 break;
-            case 'open-now':
-                restsData.filter((rest) => {
-                    if (rest.opening_hours && rest.opening_hours.open_now) return rest;
-                });
-                // restsData.forEach((rest) => console.log('rest.opening_hours.open_now', rest.opening_hours.open_now))
-                break;
-            default:
-                break;
         }
-        setRestsData(prevData => prevData = [...restsData])
+        setRestsData(prevData => prevData = isOpenNow ? restsData.filter((r) => (r.opening_hours && r.opening_hours.open_now)) : [...restsData])
         setIsListLoading(false)
     }
 
@@ -77,7 +71,7 @@ export default function RestaurantsScreen({ navigation }) {
 
     return (
         <SafeAreaView style={styles(isDarkMode).container}>
-            <Search sortBy={sortBy} setSortBy={setSortBy} setIsListLoading={setIsListLoading} isDescending={isDescending} setIsDescending={setIsDescending} />
+            <Search sortBy={sortBy} setSortBy={setSortBy} setIsOpenNow={setIsOpenNow} isOpenNow={isOpenNow} setIsListLoading={setIsListLoading} isDescending={isDescending} setIsDescending={setIsDescending} />
             {isErrors && <View style={styles().errCon}>
                 <Text style={styles().errorMsg}>Something went wrong retrieving the data.</Text>
                 <Text style={styles().errorMsg}>Try different search or try again later.</Text>
