@@ -9,10 +9,12 @@ export const LocationContext = createContext()
 
 export const LocationContextProvider = ({ children }) => {
     const { isMock, isLocation, isLocationOn } = useContext(AppConfigContext)
+
     const [location, setLocation] = useState(null)
     const [isLocationLoading, setIsLocationLoading] = useState(false)
     const [locationError, setLocationError] = useState(null)
     const [isSearch, setIsSearch] = useState(true)
+    const [currLocation, setCurrLocation] = useState(null)
     const [keyword, setKeyword] = useState(isMock ? 'Antwerp' : 'Tel Aviv')
 
     useEffect(() => {
@@ -35,15 +37,19 @@ export const LocationContextProvider = ({ children }) => {
     }
 
     const search = async (searchTerm) => {
-        if (!searchTerm.length) return
-        getLocation(searchTerm, isMock).then((res) => {
-            if (!res || !res[0]) throw new Error()
-            else setLocation(res[0])
-            setIsLocationLoading(false)
-        }).catch((err) => {
-            setLocationError(err)
-            setIsLocationLoading(false)
-        })
+        try {
+            if (!searchTerm.length) return
+            getLocation(searchTerm, isMock).then((res) => {
+                if (!res || !res[0]) throw new Error()
+                else setLocation(res[0])
+                setIsLocationLoading(false)
+            }).catch((err) => {
+                setLocationError(err)
+                setIsLocationLoading(false)
+            })
+        } catch (err) {
+            console.log('Error in search:', err)
+        }
     }
 
     const getCurrLocation = async () => {
@@ -53,6 +59,7 @@ export const LocationContextProvider = ({ children }) => {
             setIsLocationLoading(false)
             return
         }
+        setCurrLocation({ lat: location.latitude, lng: location.longitude })
         const res = await getCityName(location.latitude, location.longitude)
         setIsSearch(true)
         if (res && res.data) {
@@ -84,7 +91,7 @@ export const LocationContextProvider = ({ children }) => {
     }
 
     return (
-        <LocationContext.Provider value={{ location, isLocationLoading, onSearch, keyword, locationError, initLocation }}>
+        <LocationContext.Provider value={{ location, currLocation, isLocationLoading, onSearch, keyword, locationError, initLocation, setIsLocationLoading }}>
             {children}
         </LocationContext.Provider>
     )

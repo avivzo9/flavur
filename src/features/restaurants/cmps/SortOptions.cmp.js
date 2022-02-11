@@ -24,6 +24,7 @@ export default function SortOptions({ sortBy, setSortBy, isDescending, setIsDesc
             <View style={styles().filters}>
                 <Chip mode={sortBy === 'priceLevel' ? 'flat' : 'outlined'} style={styles(isDarkMode).chip} icon="currency-usd" onPress={() => sendFilter('priceLevel')}>Price</Chip>
                 <Chip mode={sortBy === 'rating' ? 'flat' : 'outlined'} style={styles(isDarkMode).chip} icon="star" onPress={() => sendFilter('rating')}>Rating</Chip>
+                <Chip mode={sortBy === 'distance' ? 'flat' : 'outlined'} style={styles(isDarkMode).chip} icon="star" onPress={() => sendFilter('distance')}>Distance</Chip>
                 <Chip mode={isOpenNow ? 'flat' : 'outlined'} style={styles(isDarkMode).chip} icon="timetable" onPress={() => sendFilter(!isOpenNow, true)}>Open now</Chip>
             </View>
             <IconButton

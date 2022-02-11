@@ -6,17 +6,16 @@ import { getRestaurantDetailsByPlaceId, getRestaurants } from './restaurants.ser
 export const RestaurantsContext = createContext()
 
 export const RestaurantsContextProvider = ({ children }) => {
-    const [restaurants, setRestaurants] = useState([])
-    const [restaurantLoading, setRestaurantLoading] = useState(true)
-    const [restaurantError, setRestaurantError] = useState(null)
     const { isMock } = useContext(AppConfigContext)
     const { location } = useContext(LocationContext)
     const { isLocation, searchRadius } = useContext(AppConfigContext)
 
+    const [restaurants, setRestaurants] = useState([])
+    const [restaurantLoading, setRestaurantLoading] = useState(true)
+    const [restaurantError, setRestaurantError] = useState(null)
+
     useEffect(() => {
-        if (location) {
-            initContext()
-        }
+        if (location) initContext()
     }, [location, isLocation])
 
     const initContext = () => {

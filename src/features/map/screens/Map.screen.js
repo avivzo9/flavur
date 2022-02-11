@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react"
-import { StyleSheet, View, Text } from "react-native";
-import MapView, { Marker, Callout } from 'react-native-maps';
+import { StyleSheet, View } from "react-native";
+import MapView, { Marker } from 'react-native-maps';
 import { LocationContext } from "../../../services/location/location.context";
 import { RestaurantsContext } from "../../../services/restaurants/restaurants.context";
 import { AppConfigContext } from "../../../services/appConfig/appConfig.context";
@@ -11,46 +11,43 @@ import RestaurantCard from "../../restaurants/cmps/RestaurantCard.cmp";
 import { spacing } from "../../../utils/sizes";
 
 export default function MapScreen({ route, navigation }) {
-    const { location } = useContext(LocationContext)
+    const { location, isLocationLoading } = useContext(LocationContext)
     const { restaurants, restaurantLoading } = useContext(RestaurantsContext)
     const { isLocation } = useContext(AppConfigContext)
-    const { viewport } = location.geometry
 
     const scrollRef = useRef()
 
-    const [latDelta, setLatDelta] = useState(null)
     const [currRest, setCurrRest] = useState(null)
     const [regionData, setRegionData] = useState({ latitude: null, longitude: null, latitudeDelta: null, longitudeDelta: 0.05 })
 
     useEffect(() => {
-        if (!route.params) setCurrRest(restaurants[0])
-        else {
-            const { restaurant } = route.params
-            restaurant ? setCurrRest(restaurant) : setCurrRest(restaurants[0])
-        }
-    }, [])
-
-    useEffect(() => {
         if (location) {
+            const { viewport } = location.geometry
             const northeastLat = viewport.northeast.lat
             const southwestLat = viewport.southwest.lat
-            setLatDelta(northeastLat - southwestLat)
             setRegionData({ latitude: location.geometry.location.lat, longitude: location.geometry.location.lng, latitudeDelta: (northeastLat - southwestLat), longitudeDelta: 0.05 })
+            if (route.params && route.params.restaurant) {
+                currRest ?
+                    (route.params.restaurant.place_id != currRest.place_id) ? setCurrRest(route.params.restaurant) : setCurrRest(restaurants[0])
+                    : setCurrRest(route.params.restaurant)
+            }
+            else setCurrRest(restaurants[0])
         }
-    }, [location, viewport])
+    }, [location, route, restaurants])
 
     useEffect(() => {
         if (currRest) setRegion(currRest)
     }, [currRest])
 
     const setRegion = (rest) => {
+        if (isLocation) return
         const northeastLat = rest.geometry.viewport.northeast.lat
         const southwestLat = rest.geometry.viewport.southwest.lat
         setRegionData({ latitude: rest.geometry.location.lat, longitude: rest.geometry.location.lng, latitudeDelta: (northeastLat - southwestLat), longitudeDelta: 0.02 })
     }
 
-    if (!latDelta || restaurantLoading) return (<Loader />)
-    if (!location) return (<MapView style={styles.map} region={{ latitude: 31.4000, longitude: 35.0000, latitudeDelta: (35.0818 - 31.4117), longitudeDelta: 0.1 }} />)
+    if (restaurantLoading || isLocationLoading) return (<Loader />)
+    if (!location || !regionData) return (<MapView style={styles.map} region={{ latitude: 31.4000, longitude: 35.0000, latitudeDelta: (35.0818 - 31.4117), longitudeDelta: 0.1 }} />)
 
     return (
         <>
@@ -74,13 +71,12 @@ export default function MapScreen({ route, navigation }) {
                         scrollRef.current?.scrollTo({ y: 0, animated: true });
                     }}
                 >
-                    <Ionicons name='location-sharp' size={45} color={currRest.place_id === rest.place_id ? "tomato" : "black"} />
+                    <Ionicons name='location-sharp' size={45} color={currRest ? currRest.place_id === rest.place_id ? "tomato" : "black" : "black"} />
                 </Marker>)}
             </MapView>
-            {currRest &&
-                <View style={styles.hoverCardCon}>
-                    <RestaurantCard scrollRef={scrollRef} restaurant={currRest} navigation={navigation} route={route} />
-                </View>}
+            {currRest && <View style={styles.hoverCardCon}>
+                <RestaurantCard scrollRef={scrollRef} restaurant={currRest} navigation={navigation} route={route} />
+            </View>}
         </>
     )
 }

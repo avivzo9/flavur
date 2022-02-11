@@ -14,7 +14,7 @@ import Loader from '../../Loader';
 
 export default function RestaurantsScreen({ navigation }) {
     const { restaurants, restaurantLoading, restaurantError } = useContext(RestaurantsContext)
-    const { locationError, isLocationLoading } = useContext(LocationContext)
+    const { currLocation, locationError, isLocationLoading, initLocation } = useContext(LocationContext)
     const { isDarkMode } = useContext(AppConfigContext)
 
     const isErrors = (!!restaurantError || !!locationError);
@@ -62,10 +62,46 @@ export default function RestaurantsScreen({ navigation }) {
                     }
                 })
                 break;
+            case 'distance':
+                if (currLocation) {
+                    restsData.forEach((rest) => {
+                        const distance = getDistanceFromLatLonInKm(parseInt(currLocation.lat),
+                            parseInt(currLocation.lng), rest.geometry.location.lat,
+                            rest.geometry.location.lng);
+                        rest.distance = distance;
+                    })
+                    // for (let i = 0; i < restsData.length; i++) {
+                    //     let distance = getDistanceFromLatLonInKm(parseInt(currLocation.lat),
+                    //         parseInt(currLocation.lng), restsData[i].geometry.location.lat,
+                    //         restsData[i].geometry.location.lng);
+                    //     restsData[i].distance = distance;
+                    // }
+                    restsData.sort((a, b) => a.distance - b.distance);
+                    if (isDescending) restsData.reverse()
+                } else {
+                    initLocation(true)
+                    setSortBy(null)
+                }
+                break;
         }
         setRestsData(prevData => prevData = isOpenNow ? restsData.filter((r) => (r.opening_hours && r.opening_hours.open_now)) : [...restsData])
         setIsListLoading(false)
     }
+
+    const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
+        var R = 6371;
+        var dLat = deg2rad(lat2 - lat1);
+        var dLon = deg2rad(lon2 - lon1);
+        var a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        var d = R * c;
+        return d;
+    }
+
+    const deg2rad = (deg) => deg * (Math.PI / 180)
 
     if (restaurantLoading || isLocationLoading || !restsData || !restsData.length) return (<Loader />)
 

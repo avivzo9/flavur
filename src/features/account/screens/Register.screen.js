@@ -15,7 +15,7 @@ export default function RegisterScreen({ navigation }) {
     return (
         <BackgroundImgView>
             <View>
-                <Text style={styles.header}>Meals To Go</Text>
+                <Text style={styles.header}>F l a v u r</Text>
             </View>
             {isLoading && <View style={styles.registerCon}>
                 <Loader />

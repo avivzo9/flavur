@@ -43,7 +43,10 @@ const styles = StyleSheet.create({
         padding: 5,
         width: '80%',
         height: 50,
-        margin: spacing.sm
+        margin: spacing.sm,
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
     },
     header: {
         color: 'white',

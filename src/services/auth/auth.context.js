@@ -17,26 +17,38 @@ export const AuthContextProvider = ({ children }) => {
     }, [])
 
     const login = async (email, password) => {
-        setIsLoading(true)
-        const res = await authService.loginRequest(email, password)
-        res ? setUser(res) : setErrorMsg('Incorrect email or password')
-        setIsLoading(false);
+        try {
+            setIsLoading(true)
+            const res = await authService.loginRequest(email, password)
+            res ? setUser(res) : setErrorMsg('Incorrect email or password')
+            setIsLoading(false);
+        } catch (err) {
+            console.log('Error in login:', err)
+        }
     }
 
     const logout = async () => {
-        setUser(null)
-        await authService.logoutRequest()
+        try {
+            setUser(null)
+            await authService.logoutRequest()
+        } catch (err) {
+            console.log('Error in logout:', err)
+        }
     }
 
     const register = async (email, password, repeatedPassword) => {
-        setIsLoading(true);
-        if (password !== repeatedPassword) setErrorMsg('Incompatible passwords')
-        else if (password.length < 6) setErrorMsg('Password should be at least 6 characters')
-        else {
-            const user = await authService.registerRequest(email, password)
-            user ? setUser(user) : setErrorMsg('The email address is badly formatted or used by another account')
+        try {
+            setIsLoading(true);
+            if (password !== repeatedPassword) setErrorMsg('Incompatible passwords')
+            else if (password.length < 6) setErrorMsg('Password should be at least 6 characters')
+            else {
+                const user = await authService.registerRequest(email, password)
+                user ? setUser(user) : setErrorMsg('The email address is badly formatted or used by another account')
+            }
+            setIsLoading(false);
+        } catch (err) {
+            console.log('Error in register:', err)
         }
-        setIsLoading(false);
     };
 
     return (

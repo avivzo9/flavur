@@ -1,7 +1,7 @@
 import React from "react";
 import { ImageBackground, StyleSheet, View } from "react-native";
 
-const image = require('../../../assets/background-imgs/bgImg.jpg')
+const image = require('../../../assets/background-imgs/account_img.jpg')
 
 export default function BackgroundImgView({ children }) {
     return (
