@@ -11,13 +11,15 @@ import { FavoritesContext } from "../../../services/favorites/favorites.context"
 import { colors } from "../../../utils/colors";
 import { spacing } from "../../../utils/sizes";
 import FadeInView from "../../animations/fade.animation";
+import UpdatePassword from "../cmps/UpdatePasswordForm.cmp";
 
 export default function SettingsScreen({ navigation }) {
     const { isDarkMode, setIsDarkMode, isMock, setIsMock } = useContext(AppConfigContext)
-    const { user, logout } = useContext(AuthContext)
+    const { user, logout, updatePassword } = useContext(AuthContext)
     const { clearFavorites } = useContext(FavoritesContext)
 
     const [profilePhoto, setProfilePhoto] = useState(null)
+    const [isUpdatePassword, setIsUpdatePassword] = useState(false)
 
     useFocusEffect(
         useCallback(() => {
@@ -38,7 +40,7 @@ export default function SettingsScreen({ navigation }) {
             },
             {
                 text: "Clear",
-                onPress: async () => clearFavorites()
+                onPress: async () => await clearFavorites()
             }
         ])
     }
@@ -52,9 +54,17 @@ export default function SettingsScreen({ navigation }) {
             },
             {
                 text: "Logout",
-                onPress: async () => logout()
+                onPress: async () => await logout()
             }
         ])
+    }
+
+    const onUpdatePassword = async () => {
+
+    }
+
+    const logLocationStorage = async () => {
+        console.log(await AsyncStorage.getItem('location'))
     }
 
     return (
@@ -69,40 +79,6 @@ export default function SettingsScreen({ navigation }) {
             <FadeInView>
                 <List.Section>
                     <List.Item
-                        style={styles().item}
-                        titleStyle={styles(isDarkMode).darkModeTxt}
-                        descriptionStyle={styles(isDarkMode).darkModeTxt}
-                        title="Clear Favorites"
-                        description="Delete all of your favorites"
-                        left={(props) => <List.Icon {...props} color={isDarkMode ? 'white' : 'black'} icon='trash-can' />}
-                        onPress={() => onClearFavorites()}
-                    />
-                    {/* <List.Item
-                    style={[styles().item, styles(isDarkMode).darkModeTxt]}
-                    titleStyle={styles(isDarkMode).darkModeTxt}
-                    descriptionStyle={styles(isDarkMode).darkModeTxt}
-                    title="Search History"
-                    left={(props) => <List.Icon {...props} color={isDarkMode ? 'white' : 'black'} icon='history' />}
-                    onPress={() => null}
-                /> */}
-                    {user.email === 'avivzo9@gmail.com' && <><List.Item
-                        style={[styles().item, styles(isDarkMode).darkModeTxt]}
-                        titleStyle={styles(isDarkMode).darkModeTxt}
-                        descriptionStyle={styles(isDarkMode).darkModeTxt}
-                        title="Clear Storage"
-                        left={(props) => <List.Icon {...props} color={isDarkMode ? 'white' : 'black'} icon='trash-can' />}
-                        onPress={() => AsyncStorage.clear()}
-                    />
-                        <List.Item
-                            style={[styles().item, styles(isDarkMode).darkModeTxt]}
-                            titleStyle={styles(isDarkMode).darkModeTxt}
-                            descriptionStyle={styles(isDarkMode).darkModeTxt}
-                            title="Toggle Mock Mode"
-                            description={`Mock Mode is ${isMock ? 'on' : 'off'}`}
-                            left={(props) => <List.Icon {...props} color={isDarkMode ? 'white' : 'black'} icon={isMock ? 'toggle-switch' : 'toggle-switch-off'} />}
-                            onPress={() => setIsMock(!isMock)}
-                        /></>}
-                    <List.Item
                         style={[styles().item, styles(isDarkMode).darkModeTxt]}
                         titleStyle={styles(isDarkMode).darkModeTxt}
                         descriptionStyle={styles(isDarkMode).darkModeTxt}
@@ -112,14 +88,59 @@ export default function SettingsScreen({ navigation }) {
                         onPress={() => setIsDarkMode(!isDarkMode)}
                     />
                     <List.Item
+                        style={styles().item}
+                        titleStyle={styles(isDarkMode).darkModeTxt}
+                        descriptionStyle={styles(isDarkMode).darkModeTxt}
+                        title="Clear Favorites"
+                        description="Delete all of your favorites"
+                        left={(props) => <List.Icon {...props} color={isDarkMode ? 'white' : 'black'} icon='trash-can' />}
+                        onPress={() => onClearFavorites()}
+                    />
+                    {user.email != 'guest@guest.com' && <List.Item
+                        style={[styles().item, styles(isDarkMode).darkModeTxt]}
+                        titleStyle={styles(isDarkMode).darkModeTxt}
+                        descriptionStyle={styles(isDarkMode).darkModeTxt}
+                        title="Change password"
+                        left={(props) => <List.Icon {...props} color={isDarkMode ? 'white' : 'black'} icon='lock' />}
+                        onPress={() => setIsUpdatePassword(true)}
+                    />}
+                    <List.Item
                         style={[styles().item, styles(isDarkMode).darkModeTxt]}
                         titleStyle={styles(isDarkMode).darkModeTxt}
                         title="Logout"
                         left={(props) => <List.Icon {...props} color={isDarkMode ? 'white' : 'black'} icon='login' />}
                         onPress={() => onLogout()}
                     />
+                    {user.email === 'avivzo9@gmail.com' && <>
+                        <List.Item
+                            style={[styles().item, styles(isDarkMode).darkModeTxt]}
+                            titleStyle={styles(isDarkMode).darkModeTxt}
+                            descriptionStyle={styles(isDarkMode).darkModeTxt}
+                            title="Clear Storage"
+                            left={(props) => <List.Icon {...props} color={isDarkMode ? 'white' : 'black'} icon='trash-can' />}
+                            onPress={() => AsyncStorage.clear()}
+                        />
+                        <List.Item
+                            style={[styles().item, styles(isDarkMode).darkModeTxt]}
+                            titleStyle={styles(isDarkMode).darkModeTxt}
+                            descriptionStyle={styles(isDarkMode).darkModeTxt}
+                            title="Toggle Mock Mode"
+                            description={`Mock Mode is ${isMock ? 'on' : 'off'}`}
+                            left={(props) => <List.Icon {...props} color={isDarkMode ? 'white' : 'black'} icon={isMock ? 'toggle-switch' : 'toggle-switch-off'} />}
+                            onPress={() => setIsMock(!isMock)}
+                        />
+                        <List.Item
+                            style={[styles().item, styles(isDarkMode).darkModeTxt]}
+                            titleStyle={styles(isDarkMode).darkModeTxt}
+                            descriptionStyle={styles(isDarkMode).darkModeTxt}
+                            title="Start location debug"
+                            left={(props) => <List.Icon {...props} color={isDarkMode ? 'white' : 'black'} icon='android-debug-bridge' />}
+                            onPress={() => logLocationStorage()}
+                        />
+                    </>}
                 </List.Section>
             </FadeInView>
+            {isUpdatePassword && <UpdatePassword setIsUpdatePassword={setIsUpdatePassword} />}
         </SafeAreaView>
     )
 }

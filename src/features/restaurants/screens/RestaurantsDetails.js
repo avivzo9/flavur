@@ -52,7 +52,6 @@ export default function RestaurantsDetails({ navigation, route }) {
             <RestaurantCard route={route.name} isDetails={true} restaurant={restaurant} />
             <Divider />
             <ScrollView style={styles(isDarkMode).detailsCon}>
-                {/* {(restaurant.opening_hours || restaurant.price_level) && <> */}
                 <View style={styles().headerCon}>
                     <Ionicons name='information-circle-outline' size={28} color={isDarkMode ? colors.darkMode.light : colors.darkMode.dark} />
                     <Text style={[styles().header, styles(isDarkMode).darkModeTxt]}>{isInformation ? 'Information' : 'No Information'}</Text>
@@ -80,7 +79,6 @@ export default function RestaurantsDetails({ navigation, route }) {
                         />
                     </TouchableOpacity>
                 </List.Section>
-                {/* </>} */}
                 {(restaurant.reviews && !!restaurant.reviews.length) && <View>
                     <View style={styles().headerCon}>
                         <Ionicons name='star-outline' size={28} color={isDarkMode ? colors.darkMode.light : colors.darkMode.dark} />

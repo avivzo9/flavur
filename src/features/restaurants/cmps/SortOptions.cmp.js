@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { StyleSheet, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import { Chip, IconButton } from "react-native-paper";
 import { AppConfigContext } from "../../../services/appConfig/appConfig.context";
 import { spacing } from "../../../utils/sizes";
@@ -21,12 +22,12 @@ export default function SortOptions({ sortBy, setSortBy, isDescending, setIsDesc
 
     return (
         <View style={styles().container}>
-            <View style={styles().filters}>
+            <ScrollView style={styles().filters} horizontal={true} showsHorizontalScrollIndicator={false} >
                 <Chip mode={sortBy === 'priceLevel' ? 'flat' : 'outlined'} style={styles(isDarkMode).chip} icon="currency-usd" onPress={() => sendFilter('priceLevel')}>Price</Chip>
                 <Chip mode={sortBy === 'rating' ? 'flat' : 'outlined'} style={styles(isDarkMode).chip} icon="star" onPress={() => sendFilter('rating')}>Rating</Chip>
-                <Chip mode={sortBy === 'distance' ? 'flat' : 'outlined'} style={styles(isDarkMode).chip} icon="star" onPress={() => sendFilter('distance')}>Distance</Chip>
+                <Chip mode={sortBy === 'distance' ? 'flat' : 'outlined'} style={styles(isDarkMode).chip} icon="map-marker-distance" onPress={() => sendFilter('distance')}>Distance</Chip>
                 <Chip mode={isOpenNow ? 'flat' : 'outlined'} style={styles(isDarkMode).chip} icon="timetable" onPress={() => sendFilter(!isOpenNow, true)}>Open now</Chip>
-            </View>
+            </ScrollView>
             <IconButton
                 icon={isDescending ? "arrow-down-bold-circle" : "arrow-up-bold-circle"}
                 color={isDarkMode ? 'white' : 'black'}
@@ -48,8 +49,6 @@ const styles = (isDark) => StyleSheet.create({
     },
     filters: {
         flexDirection: 'row',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
     },
     chip: {
         marginRight: spacing.sm,

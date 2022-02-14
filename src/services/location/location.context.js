@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { Alert } from 'react-native';
 import GetLocation from 'react-native-get-location';
-import { getLocation } from './location.service';
+import { getLocation, saveLocationForDebug } from './location.service';
 import { AppConfigContext } from '../appConfig/appConfig.context';
 
 export const LocationContext = createContext()
@@ -39,7 +39,8 @@ export const LocationContextProvider = ({ children }) => {
     const search = async (searchTerm) => {
         try {
             if (!searchTerm.length) return
-            getLocation(searchTerm, isMock).then((res) => {
+            setKeyword(searchTerm)
+            getLocation(searchTerm.toLowerCase(), isMock).then((res) => {
                 if (!res || !res[0]) throw new Error()
                 else setLocation(res[0])
                 setIsLocationLoading(false)
@@ -63,8 +64,9 @@ export const LocationContextProvider = ({ children }) => {
         const res = await getCityName(location.latitude, location.longitude)
         setIsSearch(true)
         if (res && res.data) {
-            setKeyword(res.data.results[0].formatted_address)
-            search(res.data.results[0].formatted_address.toLowerCase())
+            search(res.data.results[0].formatted_address)
+            const locForDebug = { location, res }
+            saveLocationForDebug(locForDebug)
         }
     }
 
@@ -82,7 +84,7 @@ export const LocationContextProvider = ({ children }) => {
         ])
     }
 
-    const getCityName = async (lat, lng) => axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyAuViHJowBExdhvmeG93jbLtfd7IB2AHzQ`)
+    const getCityName = async (lat, lng) => await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyAuViHJowBExdhvmeG93jbLtfd7IB2AHzQ`)
 
     const onSearch = async (searchTerm) => {
         setIsLocationLoading(true)

@@ -10,8 +10,6 @@ import { colors } from '../../../utils/colors';
 import { AppConfigContext } from '../../../services/appConfig/appConfig.context';
 import Loader from '../../Loader';
 
-// TODO: filterBy: {price, rating, open-now}
-
 export default function RestaurantsScreen({ navigation }) {
     const { restaurants, restaurantLoading, restaurantError } = useContext(RestaurantsContext)
     const { currLocation, locationError, isLocationLoading, initLocation } = useContext(LocationContext)

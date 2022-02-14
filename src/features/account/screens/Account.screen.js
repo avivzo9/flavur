@@ -15,8 +15,9 @@ export default function AccountScreen({ navigation }) {
                 <Text style={styles.header}>F l a v u r</Text>
             </View>
             <View style={styles.accountMenu}>
-                <Button style={styles.button} color="black" icon="login" mode="contained" onPress={() => navigation.navigate("login")}>login</Button>
-                <Button style={styles.button} color="black" icon="login" mode="contained" onPress={() => navigation.navigate("register")}>signup</Button>
+                <Button style={styles.button} labelStyle={{ width: '60%' }} color="black" icon="login" mode="contained" onPress={() => navigation.navigate("login")}>login</Button>
+                <Button style={styles.button} labelStyle={{ width: '60%' }} color="black" icon="login" mode="contained" onPress={() => navigation.navigate("register")}>signup</Button>
+                <Button style={styles.button} labelStyle={{ width: '60%' }} color="black" icon="login" mode="contained" onPress={() => navigation.navigate("login", 'guestMode')}>guest</Button>
             </View>
         </BackgroundImgView>
     )

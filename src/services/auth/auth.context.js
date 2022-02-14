@@ -18,10 +18,15 @@ export const AuthContextProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
+            if (!email || !password) {
+                setErrorMsg('Please enter valid email and password')
+                return
+            }
             setIsLoading(true)
             const res = await authService.loginRequest(email, password)
             res ? setUser(res) : setErrorMsg('Incorrect email or password')
             setIsLoading(false);
+            return res ? true : false
         } catch (err) {
             console.log('Error in login:', err)
         }
@@ -38,6 +43,10 @@ export const AuthContextProvider = ({ children }) => {
 
     const register = async (email, password, repeatedPassword) => {
         try {
+            if (!email || !password || !repeatedPassword) {
+                setErrorMsg('Please enter valid email and password')
+                return
+            }
             setIsLoading(true);
             if (password !== repeatedPassword) setErrorMsg('Incompatible passwords')
             else if (password.length < 6) setErrorMsg('Password should be at least 6 characters')
@@ -51,8 +60,18 @@ export const AuthContextProvider = ({ children }) => {
         }
     };
 
+    const updatePassword = async (password) => {
+        try {
+            setIsLoading(true)
+            await authService.updateAccountPassword(password)
+            setIsLoading(false)
+        } catch (err) {
+            console.log('Error in logout:', err)
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{ user, isLoading, login, logout, register, errorMsg }}>
+        <AuthContext.Provider value={{ user, isLoading, login, logout, register, updatePassword, errorMsg }}>
             {children}
         </AuthContext.Provider>
     )

@@ -47,7 +47,7 @@ export default function MapScreen({ route, navigation }) {
     }
 
     if (restaurantLoading || isLocationLoading) return (<Loader />)
-    if (!location || !regionData) return (<MapView style={styles.map} region={{ latitude: 31.4000, longitude: 35.0000, latitudeDelta: (35.0818 - 31.4117), longitudeDelta: 0.1 }} />)
+    if (!location || !regionData || !currRest) return (<MapView style={styles.map} region={{ latitude: 31.4000, longitude: 35.0000, latitudeDelta: (35.0818 - 31.4117), longitudeDelta: 0.1 }} />)
 
     return (
         <>

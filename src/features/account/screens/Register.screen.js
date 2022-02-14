@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { AuthContext } from "../../../services/auth/auth.context";
 import { fontSizes, spacing } from "../../../utils/sizes";
+import FadeInView from "../../animations/fade.animation";
 import Loader from "../../Loader";
 import BackgroundImgView from '../cmps/BackgroundImgView'
 
@@ -42,7 +43,7 @@ export default function RegisterScreen({ navigation }) {
                     style={styles.inputField}
                     secureTextEntry
                 />
-                {errorMsg && <Text style={styles.errMsg}>{errorMsg}</Text>}
+                {errorMsg && <FadeInView><Text style={styles.errMsg}>{errorMsg}</Text></FadeInView>}
                 <Button style={styles.button} color="black" icon="login" mode="contained" onPress={() => register(email, password, repeatedPassword)}>signup</Button>
             </View>}
             <Button style={styles.button} color="white" icon="step-backward" mode="contained" onPress={() => navigation.goBack()}>back</Button>
