@@ -60,9 +60,8 @@ export default function UpdatePassword({ setIsUpdatePassword }) {
     return (
         <View style={styles(isDarkMode).container}>
             <View style={styles().headerCon}>
-                <Text style={styles().title}></Text>
-                <Text style={styles().title}>{isLoggedin ? 'What\'s your new password' : 'Please login first'}</Text>
-                <Ionicons onPress={() => setIsUpdatePassword(false)} name={"close-sharp"} size={24} color={'black'} />
+                <Text style={styles(isDarkMode).title}>{isLoggedin ? 'What\'s your new password?' : 'Please login first'}</Text>
+                <Ionicons onPress={() => setIsUpdatePassword(false)} name={"close-sharp"} size={28} color={isDarkMode ? 'white' :'black'} />
             </View>
             {(isUpdateLoading || isLoading) && <View style={styles(isDarkMode).inputCon}><Loader /></View>}
             {(!isUpdateLoading || !isLoading) && <View style={styles(isDarkMode, isLoggedin).inputCon}>
@@ -115,11 +114,12 @@ const styles = (isDarkMode, isLoggedin) => StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        margin: spacing.md
+        marginTop: spacing.md,
+        marginBottom: spacing.md
     },
     title: {
-        color: 'black',
-        fontSize: 20,
+        color: isDarkMode ? 'white' : 'black',
+        fontSize: fontSizes.lg,
         textAlign: 'center',
         fontFamily: fonts.header
     },
@@ -133,7 +133,7 @@ const styles = (isDarkMode, isLoggedin) => StyleSheet.create({
         marginBottom: spacing.sm
     },
     inputCon: {
-        backgroundColor: isDarkMode ? colors.darkMode.light : colors.darkMode.topDark,
+        backgroundColor: colors.darkMode.topDark,
         marginTop: 25,
         padding: spacing.md,
         borderRadius: 10,
