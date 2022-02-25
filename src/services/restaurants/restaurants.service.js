@@ -6,11 +6,7 @@ export async function getRestaurants(location, isMock, radius) {
     const KEY = RESTAURANT_KEY + location + radius
     try {
         const storage = await loadFromStorage(KEY)
-        if (storage && storage.length) {
-            console.log('Load restaurants from storage!');
-            return storage;
-        }
-        console.log('Load restaurants from API!');
+        if (storage && storage.length) return storage;
         const restaurants = await fetch(`https://us-central1-mealstogo-dd9b1.cloudfunctions.net/placesNearBy?location=${location}&mock=${String(isMock)}&radius=${(radius * 10000).toFixed(0)}`)
         let { results } = await restaurants.json();
         let restsToReturn = []

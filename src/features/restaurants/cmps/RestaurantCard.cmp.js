@@ -31,23 +31,24 @@ export default function RestaurantCard({ restaurant, navigation, route, isDetail
                     {restaurant.photos.length > 1 ?
                         <ScrollView showsHorizontalScrollIndicator={false} ref={scrollRef ? scrollRef : null} width='96%' horizontal={true} style={styles(isDarkMode).coverImgCon}>
                             {restaurant.photos.map((photo, idx) =>
+                                // <Image style={[styles().coverImg, { width: isDetails ? 200 : 140 }]} key={`${photo}-${idx}`} source={{ uri: photo }} />
                                 <ImageLoad
                                     borderRadius={10}
-                                    isShowActivity={false}
-                                    key={`${photo}-${idx}`} source={{ uri: photo }}
+                                    isShowActivity={true}
+                                    key={`${photo}-${idx}`}
+                                    source={{ uri: photo }}
                                     style={[styles().coverImg, { width: isDetails ? 200 : 140 }]}
-                                />)}
+                                />
+                            )}
                         </ScrollView> :
-                        <ImageLoad loadingStyle={{ size: 'large', color: 'tomato' }} source={{ uri: restaurant.photos[0] }} style={[styles().coverImg, { width: '100%', height: '100%' }]} />}
+                        // One image:
+                        <ImageLoad source={{ uri: restaurant.photos[0] }} style={[styles().coverImg, { width: '95%', height: 114.2 }]} />}
                 </View>
                 <TouchableOpacity onPress={() => isDetails ? null : navigation.navigate('RestaurantDetails', { restaurant })} activeOpacity={isDetails ? 1 : 0.9}>
-                    {/* <View style={styles(isDarkMode).cardMainCon}> */}
                     <View style={styles(isDarkMode).cardMain}>
                         <Text style={[styles().title, styles(isDarkMode).darkModeTxt]}>{name}</Text>
                         <Text style={[styles().address, styles(isDarkMode).darkModeTxt]}>{vicinity}</Text>
                     </View>
-                    {/* <Image style={{ width: 22, height: 22 }} source={{ uri: icon }} /> */}
-                    {/* </View> */}
                     <View style={styles(isDarkMode, isDetails).contentCon}>
                         {(rating && user_ratings_total) && <View style={styles().ratingCon}>
                             {ratingArr.map((_, idx) => <Ionicons key={`star-${place_id}-${idx}`} name={"star"} size={20} color={'#FFBD00'} />)}

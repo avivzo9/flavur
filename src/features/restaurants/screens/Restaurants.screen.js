@@ -29,16 +29,19 @@ export default function RestaurantsScreen({ navigation }) {
     }, [restaurants])
 
     useEffect(() => {
-        if (sortBy) sortRestaurants()
-        else {
-            const data = JSON.parse(JSON.stringify(restaurants))
-            setRestsData(data)
-            setRestsData(prevData => prevData = isOpenNow ? data.filter((r) => (r.opening_hours && r.opening_hours.open_now)) : [...data])
-            setIsListLoading(false)
-        }
+        sortRestaurants()
+        // const data = JSON.parse(JSON.stringify(restaurants))
+        // setRestsData(prevData => prevData = isOpenNow ? data.filter((r) => (r.opening_hours && r.opening_hours.open_now)) : [...data])
+        // setIsListLoading(false)
     }, [sortBy, isDescending, isOpenNow])
 
     const sortRestaurants = () => {
+        if (!sortBy) {
+            if (isOpenNow) setRestsData(prevData => prevData = isOpenNow ? restsData.filter((r) => (r.opening_hours && r.opening_hours.open_now)) : [...restsData])
+            console.log('isOpenNow:', isOpenNow)
+            setIsListLoading(false)
+            return
+        }
         switch (sortBy) {
             case 'priceLevel':
                 restsData.sort((a, b) => a.price_level - b.price_level);
@@ -68,18 +71,14 @@ export default function RestaurantsScreen({ navigation }) {
                             rest.geometry.location.lng);
                         rest.distance = distance;
                     })
-                    // for (let i = 0; i < restsData.length; i++) {
-                    //     let distance = getDistanceFromLatLonInKm(parseInt(currLocation.lat),
-                    //         parseInt(currLocation.lng), restsData[i].geometry.location.lat,
-                    //         restsData[i].geometry.location.lng);
-                    //     restsData[i].distance = distance;
-                    // }
                     restsData.sort((a, b) => a.distance - b.distance);
                     if (isDescending) restsData.reverse()
                 } else {
                     initLocation(true)
                     setSortBy(null)
                 }
+                break;
+            default:
                 break;
         }
         setRestsData(prevData => prevData = isOpenNow ? restsData.filter((r) => (r.opening_hours && r.opening_hours.open_now)) : [...restsData])

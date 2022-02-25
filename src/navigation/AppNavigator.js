@@ -1,23 +1,22 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { RestaurantsNavigator } from './stacks/restaurantsStack';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import RestaurantsDetails from '../features/restaurants/screens/RestaurantsDetails';
-import { LocationContext } from '../services/location/location.context';
 import { AppState } from 'react-native';
 import { AppConfigContext } from '../services/appConfig/appConfig.context';
 
 const AppStack = createStackNavigator()
 
 export default function AppNavigator() {
-    const { initLocation } = useContext(LocationContext)
-    const { isLocationOn } = useContext(AppConfigContext)
+    const { checkIsLocationOn, checkIsDarkMode } = useContext(AppConfigContext)
 
     const appState = useRef(AppState.currentState);
 
     useEffect(() => {
         const subscription = AppState.addEventListener("change", async nextAppState => {
             if (nextAppState === "active") {
-                await isLocationOn()
+                await checkIsLocationOn()
+                checkIsDarkMode()
             }
             appState.current = nextAppState;
         });

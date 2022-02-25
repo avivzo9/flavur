@@ -11,7 +11,7 @@ import SortOptions from './SortOptions.cmp';
 
 export default function Search({ routeName, sortBy, setSortBy, isDescending, setIsDescending, setIsListLoading, setIsOpenNow, isOpenNow }) {
     const { setSearchRadius, isLocation, searchRadius, isDarkMode } = useContext(AppConfigContext)
-    const { keyword, onSearch, initLocation, setIsLocationLoading } = useContext(LocationContext)
+    const { keyword, onSearch, initLocation } = useContext(LocationContext)
     const { initContext } = useContext(RestaurantsContext)
 
     const [searchKeyword, setSearchKeyword] = useState(keyword)
@@ -28,12 +28,6 @@ export default function Search({ routeName, sortBy, setSortBy, isDescending, set
         initContext()
     }
 
-    const onInitLocation = () => {
-        console.log('pressed!');
-        setIsLocationLoading(true)
-        initLocation(true)
-    }
-
     return (
         <View style={routeName === 'map' ? styles().searchMapCon : styles().searchCon}>
             <Searchbar placeholder="Search..." value={searchKeyword}
@@ -41,7 +35,7 @@ export default function Search({ routeName, sortBy, setSortBy, isDescending, set
                 iconColor={isDarkMode ? colors.darkMode.light : colors.darkMode.dark}
                 inputStyle={{ color: isDarkMode ? colors.darkMode.light : colors.darkMode.dark }}
                 style={styles(isDarkMode).input}
-                onIconPress={() => onInitLocation()}
+                onIconPress={() => initLocation(true)}
                 onSubmitEditing={() => search(searchKeyword)}
                 onChangeText={(txt) => setSearchKeyword(txt)}
             />

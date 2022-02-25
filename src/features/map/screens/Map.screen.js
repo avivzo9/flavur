@@ -18,6 +18,7 @@ export default function MapScreen({ route, navigation }) {
     const scrollRef = useRef()
 
     const [currRest, setCurrRest] = useState(null)
+    const [isRestFocus, setIsRestFocus] = useState(false)
     const [regionData, setRegionData] = useState({ latitude: null, longitude: null, latitudeDelta: null, longitudeDelta: 0.05 })
 
     useEffect(() => {
@@ -40,7 +41,7 @@ export default function MapScreen({ route, navigation }) {
     }, [currRest])
 
     const setRegion = (rest) => {
-        if (isLocation) return
+        if (!isRestFocus) return
         const northeastLat = rest.geometry.viewport.northeast.lat
         const southwestLat = rest.geometry.viewport.southwest.lat
         setRegionData({ latitude: rest.geometry.location.lat, longitude: rest.geometry.location.lng, latitudeDelta: (northeastLat - southwestLat), longitudeDelta: 0.02 })
@@ -68,6 +69,7 @@ export default function MapScreen({ route, navigation }) {
                     coordinate={{ latitude: rest.geometry.location.lat, longitude: rest.geometry.location.lng }}
                     onPress={() => {
                         setCurrRest(rest)
+                        setIsRestFocus(true)
                         scrollRef.current?.scrollTo({ y: 0, animated: true });
                     }}
                 >

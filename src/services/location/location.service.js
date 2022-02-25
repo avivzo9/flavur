@@ -14,15 +14,15 @@ export async function getLocation(search, isMock) {
     }
 }
 
-export async function saveLocationForDebug(obj) {
-    try {
-        const storage = await AsyncStorage.getItem('location')
-        if (!storage || !storage.length) await AsyncStorage.setItem('location', JSON.stringify([obj]))
-        else {
-            storage.push(obj)
-            await AsyncStorage.setItem('location', JSON.stringify(storage))
-        }
-    } catch (err) {
-        console.log('err in saveLocationForDebug:', err)
-    }
-}
+// export async function saveLocationForDebug(obj) {
+//     try {
+//         const storage = await AsyncStorage.getItem('location')
+//         if (!storage || !storage.length) await AsyncStorage.setItem('location', JSON.stringify([obj]))
+//         else {
+//             storage.push(obj)
+//             await AsyncStorage.setItem('location', JSON.stringify(storage))
+//         }
+//     } catch (err) {
+//         console.log('err in saveLocationForDebug:', err)
+//     }
+// }

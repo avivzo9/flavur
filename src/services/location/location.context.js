@@ -8,7 +8,7 @@ import { AppConfigContext } from '../appConfig/appConfig.context';
 export const LocationContext = createContext()
 
 export const LocationContextProvider = ({ children }) => {
-    const { isMock, isLocation, isLocationOn } = useContext(AppConfigContext)
+    const { isMock, isLocation, checkIsLocationOn } = useContext(AppConfigContext)
 
     const [location, setLocation] = useState(null)
     const [isLocationLoading, setIsLocationLoading] = useState(false)
@@ -29,11 +29,10 @@ export const LocationContextProvider = ({ children }) => {
 
     const initLocation = async (isAlert) => {
         if (!location) return
-        await isLocationOn()
         setIsLocationLoading(true)
-        if (!isLocation) isAlert ? locationAlert() : null
+        const isLocationOn = await checkIsLocationOn()
+        if (!isLocationOn && isAlert) locationAlert()
         else await getCurrLocation()
-        setIsLocationLoading(false)
     }
 
     const search = async (searchTerm) => {
@@ -65,8 +64,8 @@ export const LocationContextProvider = ({ children }) => {
         setIsSearch(true)
         if (res && res.data) {
             search(res.data.results[0].formatted_address)
-            const locForDebug = { location, res }
-            saveLocationForDebug(locForDebug)
+            // const locForDebug = { location, res }
+            // saveLocationForDebug(locForDebug)
         }
     }
 
@@ -82,6 +81,7 @@ export const LocationContextProvider = ({ children }) => {
                 onPress: async () => await GetLocation.openGpsSettings()
             }
         ])
+        setIsLocationLoading(false)
     }
 
     const getCityName = async (lat, lng) => await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyAuViHJowBExdhvmeG93jbLtfd7IB2AHzQ`)

@@ -13,18 +13,23 @@ export const AppConfigContextProvider = ({ children }) => {
     const isAndroid = useState(Platform.OS === "android" ? true : false)
 
     useEffect(() => {
-        isLocationOn()
+        checkIsLocationOn()
         setIsDarkMode(Appearance.getColorScheme() === 'dark' ? true : false)
     }, [])
 
-    const isLocationOn = async () => {
+    const checkIsDarkMode = () => {
+        setIsDarkMode(Appearance.getColorScheme() === 'dark' ? true : false)
+    }
+
+    const checkIsLocationOn = async () => {
         const isEnable = await RNSettings.getSetting(RNSettings.LOCATION_SETTING)
         setIsLocation(isEnable === 'ENABLED' ? true : false)
+        return isEnable === 'ENABLED' ? true : false;
     }
 
     return (
         <AppConfigContext.Provider
-            value={{ isLocationOn, searchRadius, isMock, setIsMock, setIsDarkMode, isDarkMode, isAndroid, isLocation, setSearchRadius }}>
+            value={{ checkIsLocationOn, searchRadius, checkIsDarkMode, isMock, setIsMock, setIsDarkMode, isDarkMode, isAndroid, isLocation, setSearchRadius }}>
             {children}
         </AppConfigContext.Provider>
     )
