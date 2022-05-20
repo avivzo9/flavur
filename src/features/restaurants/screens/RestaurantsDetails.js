@@ -40,10 +40,11 @@ export default function RestaurantsDetails({ navigation, route }) {
         if (str) setPriceLevelStr(str)
     }
 
-    if (!restaurant) return (<View style={styles(isDarkMode).detailsError}>
-        <Text style={[styles().errorTxt, styles(isDarkMode).darkModeTxt]}>There was a problem getting this restaurant information, Try again later.</Text>
-        <Button title="Go Back" style={styles(isDarkMode).button} color={colors.darkMode.topDark} icon="step-backward" mode="contained" onPress={() => navigation.goBack()} />
-    </View>)
+    if (!restaurant) return (
+        <View style={styles(isDarkMode).detailsError}>
+            <Text style={[styles().errorTxt, styles(isDarkMode).darkModeTxt]}>There was a problem getting this restaurant information, Try again later.</Text>
+            <Button title="Go Back" style={styles(isDarkMode).button} color={colors.darkMode.topDark} icon="step-backward" mode="contained" onPress={() => navigation.goBack()} />
+        </View>)
 
     const isInformation = ((restaurant.price_level && priceLevelStr) || (restaurant.opening_hours && weekday && weekday.length))
 
@@ -59,21 +60,21 @@ export default function RestaurantsDetails({ navigation, route }) {
                 <List.Section>
                     {(restaurant.price_level && priceLevelStr) && <List.Item
                         title={`Price Level - ${priceLevelStr}`}
-                        style={styles(isDarkMode).accordion}
+                        style={styles(isDarkMode).option}
                         titleStyle={styles(isDarkMode).darkModeTxt}
                         left={props => <List.Icon {...props} color={isDarkMode ? colors.darkMode.light : colors.darkMode.dark} icon="currency-usd" />}
                     />}
                     {(restaurant.opening_hours && weekday && weekday.length) && <List.Accordion
                         title="Opening hours"
-                        style={styles(isDarkMode).accordion}
+                        style={[styles(isDarkMode).option, styles(isDarkMode).accordion]}
                         titleStyle={styles(isDarkMode).darkModeTxt}
-                        left={props => <List.Icon {...props} color={isDarkMode ? colors.darkMode.light : colors.darkMode.dark} icon="food" />}>
+                        left={props => <List.Icon {...props} color={isDarkMode ? colors.darkMode.light : colors.darkMode.dark} icon="timetable" />}>
                         {weekday.map((day, idx) => <List.Item titleStyle={styles(isDarkMode).darkModeTxt} style={{ backgroundColor: isDarkMode ? colors.darkMode.topDark : 'rgba(128, 128, 128, 0.01)' }} title={day} key={day + (idx * 2)} />)}
                     </List.Accordion>}
                     <TouchableOpacity onPress={() => navigation.navigate('map', { restaurant: restaurant })} activeOpacity={0.8}>
                         <List.Item
                             title={'Show on map'}
-                            style={styles(isDarkMode).accordion}
+                            style={styles(isDarkMode).option}
                             titleStyle={styles(isDarkMode).darkModeTxt}
                             left={props => <List.Icon {...props} color={isDarkMode ? colors.darkMode.light : colors.darkMode.dark} icon="map" />}
                         />
@@ -131,8 +132,10 @@ const styles = (isDark) => StyleSheet.create({
         margin: spacing.sm,
         alignSelf: 'center',
     },
-    accordion: {
-        backgroundColor: isDark ? colors.darkMode.topDark : 'rgba(255, 255, 255, 0.1)',
-        marginBottom: 10
+    option: {
+        backgroundColor: isDark ? colors.darkMode.topDark : 'white',
     },
+    accordion: {
+        paddingLeft: 0
+    }
 })

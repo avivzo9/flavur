@@ -38,7 +38,6 @@ export default function RestaurantsScreen({ navigation }) {
     const sortRestaurants = () => {
         if (!sortBy) {
             if (isOpenNow) setRestsData(prevData => prevData = isOpenNow ? restsData.filter((r) => (r.opening_hours && r.opening_hours.open_now)) : [...restsData])
-            console.log('isOpenNow:', isOpenNow)
             setIsListLoading(false)
             return
         }
