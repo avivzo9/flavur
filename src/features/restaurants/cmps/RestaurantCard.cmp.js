@@ -11,7 +11,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import ImageLoad from 'react-native-image-placeholder';
 
 export default function RestaurantCard({ restaurant, navigation, route, isDetails, scrollRef }) {
-    const { favorites, addFavorites, removeFavorites } = useContext(FavoritesContext)
+    const { favorites, addFavorites, removeFavorite } = useContext(FavoritesContext)
     const { isDarkMode } = useContext(AppConfigContext)
 
     const { name, vicinity, user_ratings_total, opening_hours, rating, business_status, place_id } = restaurant
@@ -25,7 +25,7 @@ export default function RestaurantCard({ restaurant, navigation, route, isDetail
         <View style={styles(isDarkMode, false, route).container}>
             <Card elevation={5} borderRadius={15} style={{ borderRadius: 15 }}>
                 <View style={styles(isDarkMode, isDetails).cover}>
-                    <TouchableOpacity activeOpacity={0.5} onPress={() => isFavourite ? removeFavorites(restaurant) : addFavorites(restaurant)} style={styles(isDarkMode).favBtn}>
+                    <TouchableOpacity activeOpacity={0.5} onPress={() => isFavourite ? removeFavorite(restaurant) : addFavorites(restaurant)} style={styles(isDarkMode).favBtn}>
                         <Ionicons name={isFavourite ? "heart" : "heart-outline"} size={28} color={isFavourite ? 'red' : 'white'} />
                     </TouchableOpacity>
                     {restaurant.photos.length > 1 ?

@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState, useContext } from "react";
+import { Image, StyleSheet, Text, View, Alert } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { FavoritesContext } from "../../../services/favorites/favorites.context";
 import { colors } from "../../../utils/colors";
 import { fontSizes, spacing } from "../../../utils/sizes";
 
 export default function SmallRestCard({ restaurant, navigation, isDarkMode, }) {
+    const { removeFavorite } = useContext(FavoritesContext)
+
     const isTmpClosed = restaurant.business_status === "OPERATIONAL" ? true : false
 
     const [city, setCity] = useState(null)
@@ -21,8 +24,22 @@ export default function SmallRestCard({ restaurant, navigation, isDarkMode, }) {
         }
     }
 
+    const onLongPress = () => {
+        Alert.alert('Remove from favorites?', `This action will remove "${restaurant.name}" from your favorites`, [
+            {
+                text: "Cancel",
+                onPress: () => null,
+                style: "cancel"
+            },
+            {
+                text: "Remove",
+                onPress: () => removeFavorite(restaurant)
+            }
+        ])
+    }
+
     return (
-        <TouchableOpacity onPress={() => navigation.navigate('RestaurantDetails', { restaurant: restaurant })} activeOpacity={0.8} style={[styles().cardCon, { width: 500 }]}>
+        <TouchableOpacity onPress={() => navigation.navigate('RestaurantDetails', { restaurant: restaurant })} onLongPress={() => onLongPress()} delayLongPress={300} activeOpacity={0.5} style={[styles().cardCon, { width: 500 }]}>
             <Image style={styles().img} source={{ uri: restaurant.photos[0] }} />
             <View style={styles().content}>
                 <Text style={[styles().mainTitle, styles(isDarkMode).darkModeTxt]}>{restaurant.name}</Text>
