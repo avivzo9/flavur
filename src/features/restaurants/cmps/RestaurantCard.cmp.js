@@ -14,7 +14,7 @@ export default function RestaurantCard({ restaurant, navigation, route, isDetail
     const { favorites, addFavorites, removeFavorites } = useContext(FavoritesContext)
     const { isDarkMode } = useContext(AppConfigContext)
 
-    const { name, icon, vicinity, user_ratings_total, opening_hours, rating, business_status, place_id } = restaurant
+    const { name, vicinity, user_ratings_total, opening_hours, rating, business_status, place_id } = restaurant
     const isTmpClosed = business_status === "OPERATIONAL" ? true : false
     const ratingArr = rating ? Array.from(new Array(Math.floor(rating))) : null
     const isFavourite = favorites.find((r) => r.place_id === restaurant.place_id)
@@ -44,7 +44,7 @@ export default function RestaurantCard({ restaurant, navigation, route, isDetail
                         // One image:
                         <ImageLoad source={{ uri: restaurant.photos[0] }} style={[styles().coverImg, { width: '95%', height: 114.2 }]} />}
                 </View>
-                <TouchableOpacity onPress={() => isDetails ? null : navigation.navigate('RestaurantDetails', { restaurant })} activeOpacity={isDetails ? 1 : 0.9}>
+                <TouchableOpacity onPress={() => isDetails ? null : navigation.navigate('RestaurantDetails', { restaurant })} activeOpacity={isDetails ? 1 : 0.95}>
                     <View style={styles(isDarkMode).cardMain}>
                         <Text style={[styles().title, styles(isDarkMode).darkModeTxt]}>{name}</Text>
                         <Text style={[styles().address, styles(isDarkMode).darkModeTxt]}>{vicinity}</Text>
@@ -99,6 +99,17 @@ const styles = (isDark, isDetails, routeName) => StyleSheet.create({
     rating: {
         fontSize: spacing.md,
     },
+    cardMain: {
+        width: '100%',
+        justifyContent: 'center',
+        paddingRight: spacing.md,
+        paddingLeft: spacing.md,
+        backgroundColor: isDark ? colors.darkMode.topDark : colors.darkMode.light,
+        borderWidth: 1,
+        borderLeftWidth: 0,
+        borderRightWidth: 0,
+        borderColor: isDark ? colors.darkMode.topDark : 'white'
+    },
     contentCon: {
         padding: spacing.md,
         flexDirection: 'row',
@@ -107,19 +118,6 @@ const styles = (isDark, isDetails, routeName) => StyleSheet.create({
         backgroundColor: isDark ? colors.darkMode.topDark : colors.darkMode.light,
         borderBottomLeftRadius: isDetails ? 0 : 10,
         borderBottomRightRadius: isDetails ? 0 : 10
-    },
-    // cardMainCon: {
-    //     flexDirection: 'row',
-    //     alignItems: 'center',
-    //     backgroundColor: isDark ? colors.darkMode.topDark : colors.darkMode.light,
-    // },
-    cardMain: {
-        width: '100%',
-        justifyContent: 'center',
-        paddingRight: spacing.md,
-        paddingLeft: spacing.md,
-        paddingBottom: spacing.sm,
-        backgroundColor: isDark ? colors.darkMode.topDark : colors.darkMode.light,
     },
     address: {
         fontFamily: fonts.body,

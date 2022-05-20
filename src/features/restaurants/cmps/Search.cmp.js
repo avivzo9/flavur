@@ -9,7 +9,7 @@ import { spacing } from '../../../utils/sizes';
 import { colors } from '../../../utils/colors';
 import SortOptions from './SortOptions.cmp';
 
-export default function Search({ routeName, sortBy, setSortBy, isDescending, setIsDescending, setIsListLoading, setIsOpenNow, isOpenNow }) {
+export default function Search({ routeName, searchOp }) {
     const { setSearchRadius, isLocation, searchRadius, isDarkMode } = useContext(AppConfigContext)
     const { keyword, onSearch, initLocation } = useContext(LocationContext)
     const { initContext } = useContext(RestaurantsContext)
@@ -55,15 +55,7 @@ export default function Search({ routeName, sortBy, setSortBy, isDescending, set
                     trackStyle={{ padding: 3 }}
                     trackClickable={false}
                 />
-                {routeName != 'map' && <SortOptions
-                    sortBy={sortBy}
-                    setSortBy={setSortBy}
-                    isDescending={isDescending}
-                    setIsDescending={setIsDescending}
-                    setIsListLoading={setIsListLoading}
-                    setIsOpenNow={setIsOpenNow}
-                    isOpenNow={isOpenNow}
-                />}
+                {routeName != 'map' && <SortOptions searchOp={searchOp} />}
             </View>
         </View>
     )

@@ -9,6 +9,7 @@ import { LocationContext } from '../../../services/location/location.context';
 import { colors } from '../../../utils/colors';
 import { AppConfigContext } from '../../../services/appConfig/appConfig.context';
 import Loader from '../../Loader';
+import SmallRestCard from '../../favorites/cmps/SmallRestCard';
 
 export default function RestaurantsScreen({ navigation }) {
     const { restaurants, restaurantLoading, restaurantError } = useContext(RestaurantsContext)
@@ -22,6 +23,7 @@ export default function RestaurantsScreen({ navigation }) {
     const [isDescending, setIsDescending] = useState(true)
     const [sortBy, setSortBy] = useState(null)
     const [isOpenNow, setIsOpenNow] = useState(false)
+    const [isSmallCard, setIsSmallCard] = useState(false)
 
     useEffect(() => {
         const data = JSON.parse(JSON.stringify(restaurants))
@@ -101,16 +103,29 @@ export default function RestaurantsScreen({ navigation }) {
 
     if (restaurantLoading || isLocationLoading || !restsData || !restsData.length) return (<Loader />)
 
+    const searchOp = {
+        sortBy,
+        setSortBy,
+        isOpenNow,
+        setIsOpenNow,
+        setIsListLoading,
+        isDescending,
+        setIsDescending,
+        isSmallCard,
+        setIsSmallCard
+    }
+
     return (
         <SafeAreaView style={styles(isDarkMode).container}>
-            <Search sortBy={sortBy} setSortBy={setSortBy} setIsOpenNow={setIsOpenNow} isOpenNow={isOpenNow} setIsListLoading={setIsListLoading} isDescending={isDescending} setIsDescending={setIsDescending} />
+            <Search searchOp={searchOp} />
             {isErrors && <View style={styles().errCon}>
                 <Text style={styles().errorMsg}>Something went wrong retrieving the data.</Text>
                 <Text style={styles().errorMsg}>Try different search or try again later.</Text>
             </View>}
             {(!isErrors && !isListLoading) && <FlatList refreshing={true} data={restsData}
                 renderItem={({ item, idx }) => <FadeInView duration={500}>
-                    <RestaurantCard navigation={navigation} restaurant={item} key={`${item.name}-${idx}`} />
+                    {!isSmallCard && <RestaurantCard navigation={navigation} restaurant={item} key={`${item.name}-${idx}`} />}
+                    {isSmallCard && <SmallRestCard isDarkMode={isDarkMode} navigation={navigation} restaurant={item} key={`${item.name}-${idx}`} />}
                 </FadeInView>}
                 contentContainerStyle={{ padding: spacing.md }} />}
             {isListLoading && <Loader />}

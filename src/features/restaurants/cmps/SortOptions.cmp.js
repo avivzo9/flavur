@@ -7,8 +7,10 @@ import { spacing } from "../../../utils/sizes";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { colors } from "../../../utils/colors";
 
-export default function SortOptions({ sortBy, setSortBy, isDescending, setIsDescending, setIsListLoading, setIsOpenNow, isOpenNow }) {
+export default function SortOptions({ searchOp }) {
     const { isDarkMode } = useContext(AppConfigContext)
+
+    const { sortBy, setSortBy, isDescending, setIsDescending, setIsListLoading, setIsOpenNow, isOpenNow, isSmallCard, setIsSmallCard } = searchOp
 
     const sendFilter = (filter, isOpen) => {
         setIsListLoading(true)
@@ -25,21 +27,24 @@ export default function SortOptions({ sortBy, setSortBy, isDescending, setIsDesc
     return (
         <View style={styles().container}>
             <ScrollView style={styles().filters} horizontal={true} showsHorizontalScrollIndicator={false} >
+                <TouchableOpacity activeOpacity={0.8} onPress={() => setIsSmallCard(!isSmallCard)} style={styles(isDarkMode).chipCon}>
+                    <Ionicons style={[styles(isDarkMode, sortBy, 'priceLevel').chip, { fontSize: 20 }]} name={isSmallCard ? "list" : "list-outline"} />
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={0.8} onPress={() => sendFilter(!isOpenNow, true)} style={styles(isDarkMode, sortBy, isOpenNow).openChipCon}>
+                    <Ionicons style={[styles(isDarkMode, sortBy, isOpenNow).openChip, { paddingRight: spacing.sm }]} name={isOpenNow ? 'time' : 'time-outline'} />
+                    <Text style={styles(isDarkMode, sortBy, isOpenNow).openChip}>Open</Text>
+                </TouchableOpacity>
                 <TouchableOpacity activeOpacity={0.8} onPress={() => sendFilter('priceLevel')} style={styles(isDarkMode, sortBy, 'priceLevel').chipCon}>
                     <Ionicons style={[styles(isDarkMode, sortBy, 'priceLevel').chip, { paddingRight: spacing.sm }]} name={sortBy === 'priceLevel' ? 'pricetag' : 'pricetag-outline'} />
                     <Text style={styles(isDarkMode, sortBy, 'priceLevel').chip}>Price</Text>
-                </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.8} onPress={() => sendFilter('rating')} style={styles(isDarkMode, sortBy, 'rating').chipCon}>
-                    <Ionicons style={[styles(isDarkMode, sortBy, 'rating').chip, { paddingRight: spacing.sm }]} name={sortBy === 'rating' ? 'star' : 'star-outline'} />
-                    <Text style={styles(isDarkMode, sortBy, 'rating').chip}>Rating</Text>
                 </TouchableOpacity>
                 <TouchableOpacity activeOpacity={0.8} onPress={() => sendFilter('distance')} style={styles(isDarkMode, sortBy, 'distance').chipCon}>
                     <Ionicons style={[styles(isDarkMode, sortBy, 'distance').chip, { paddingRight: spacing.sm }]} name={sortBy === 'distance' ? 'navigate-circle' : 'navigate-circle-outline'} />
                     <Text style={styles(isDarkMode, sortBy, 'distance').chip}>Distance</Text>
                 </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.8} onPress={() => sendFilter(!isOpenNow, true)} style={styles(isDarkMode, sortBy, isOpenNow).openChipCon}>
-                    <Ionicons style={[styles(isDarkMode, sortBy, isOpenNow).openChip, { paddingRight: spacing.sm }]} name={isOpenNow ? 'time' : 'time-outline'} />
-                    <Text style={styles(isDarkMode, sortBy, isOpenNow).openChip}>Open</Text>
+                <TouchableOpacity activeOpacity={0.8} onPress={() => sendFilter('rating')} style={styles(isDarkMode, sortBy, 'rating').chipCon}>
+                    <Ionicons style={[styles(isDarkMode, sortBy, 'rating').chip, { paddingRight: spacing.sm }]} name={sortBy === 'rating' ? 'star' : 'star-outline'} />
+                    <Text style={styles(isDarkMode, sortBy, 'rating').chip}>Rating</Text>
                 </TouchableOpacity>
             </ScrollView>
             <IconButton

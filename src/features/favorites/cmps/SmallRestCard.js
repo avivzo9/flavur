@@ -16,8 +16,8 @@ export default function SmallRestCard({ restaurant, navigation, isDarkMode, }) {
 
     const formatAddress = (address) => {
         if (address.includes(",")) {
-            setAddress(address.slice(0, (address.indexOf(',') + 1)))
-            setCity(address.slice((address.indexOf(',') + 1)))
+            setAddress(address.slice(0, (address.indexOf(',') + 2)))
+            setCity(address.slice((address.indexOf(',') + 2)))
         }
     }
 

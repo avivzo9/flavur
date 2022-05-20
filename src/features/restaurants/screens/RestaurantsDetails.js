@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
 import { Button, StyleSheet, Text, View } from "react-native";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView, TouchableHighlight, TouchableOpacity } from "react-native-gesture-handler";
 import { Divider, List } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { fontSizes, spacing } from "../../../utils/sizes";
@@ -61,24 +61,26 @@ export default function RestaurantsDetails({ navigation, route }) {
                     {(restaurant.price_level && priceLevelStr) && <List.Item
                         title={`Price Level - ${priceLevelStr}`}
                         style={styles(isDarkMode).option}
-                        titleStyle={styles(isDarkMode).darkModeTxt}
+                        titleStyle={[styles(isDarkMode).darkModeTxt, { fontSize: fontSizes.sm, padding: spacing.sm }]}
                         left={props => <List.Icon {...props} color={isDarkMode ? colors.darkMode.light : colors.darkMode.dark} icon="currency-usd" />}
                     />}
-                    {(restaurant.opening_hours && weekday && weekday.length) && <List.Accordion
-                        title="Opening hours"
-                        style={[styles(isDarkMode).option, styles(isDarkMode).accordion]}
-                        titleStyle={styles(isDarkMode).darkModeTxt}
-                        left={props => <List.Icon {...props} color={isDarkMode ? colors.darkMode.light : colors.darkMode.dark} icon="timetable" />}>
-                        {weekday.map((day, idx) => <List.Item titleStyle={styles(isDarkMode).darkModeTxt} style={{ backgroundColor: isDarkMode ? colors.darkMode.topDark : 'rgba(128, 128, 128, 0.01)' }} title={day} key={day + (idx * 2)} />)}
-                    </List.Accordion>}
-                    <TouchableOpacity onPress={() => navigation.navigate('map', { restaurant: restaurant })} activeOpacity={0.8}>
+                    {(restaurant.opening_hours && weekday && weekday.length) &&
+                        <List.Accordion
+                            title="Opening hours"
+                            style={[styles(isDarkMode).option, styles(isDarkMode).accordion]}
+                            titleStyle={[styles(isDarkMode).darkModeTxt, { fontSize: fontSizes.sm, padding: spacing.sm, paddingLeft: spacing.md }]}
+                            left={props => <List.Icon {...props} color={isDarkMode ? colors.darkMode.light : colors.darkMode.dark} icon="timetable" />}>
+                            {weekday.map((day, idx) => <List.Item titleStyle={[styles(isDarkMode).darkModeTxt, { fontSize: fontSizes.sm, paddingLeft: spacing.md }]} style={styles(isDarkMode).listItem} title={day} key={day + (idx * 2)} />)}
+                        </List.Accordion>
+                    }
+                    <TouchableHighlight onPress={() => navigation.navigate('map', { restaurant: restaurant })} activeOpacity={0.6} underlayColor={'white'}>
                         <List.Item
                             title={'Show on map'}
                             style={styles(isDarkMode).option}
-                            titleStyle={styles(isDarkMode).darkModeTxt}
+                            titleStyle={[styles(isDarkMode).darkModeTxt, { fontSize: fontSizes.sm, padding: spacing.sm }]}
                             left={props => <List.Icon {...props} color={isDarkMode ? colors.darkMode.light : colors.darkMode.dark} icon="map" />}
                         />
-                    </TouchableOpacity>
+                    </TouchableHighlight>
                 </List.Section>
                 {(restaurant.reviews && !!restaurant.reviews.length) && <View>
                     <View style={styles().headerCon}>
@@ -97,7 +99,7 @@ export default function RestaurantsDetails({ navigation, route }) {
 const styles = (isDark) => StyleSheet.create({
     detailsCon: {
         height: 100,
-        backgroundColor: isDark ? colors.darkMode.dark : colors.darkMode.light
+        backgroundColor: isDark ? colors.darkMode.dark : colors.darkMode.topLight
     },
     headerCon: {
         flexDirection: 'row',
@@ -134,8 +136,13 @@ const styles = (isDark) => StyleSheet.create({
     },
     option: {
         backgroundColor: isDark ? colors.darkMode.topDark : 'white',
+        borderColor: 'white'
     },
     accordion: {
         paddingLeft: 0
+    },
+    listItem: {
+        backgroundColor: isDark ? colors.darkMode.topDark : 'rgba(128, 128, 128, 0.01)',
+        padding: 4
     }
 })
